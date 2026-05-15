@@ -111,7 +111,7 @@
     .section-divider{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:11px;font-weight:700;letter-spacing:.5px}
     .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-    /* â”€â”€ SHARE RECEIVED BANNER â”€â”€ */
+    /* ── SHARE RECEIVED BANNER ── */
     #shareBanner{
       display:none;flex-shrink:0;
       background:linear-gradient(135deg,rgba(78,204,163,.2),rgba(83,52,131,.3));
@@ -171,27 +171,27 @@
   </svg>
   <h1>MisColecciones</h1>
   <div style="display:flex;gap:8px">
-    <button class="hbtn" id="importBtn" title="Importar JSON">â¬†</button>
-    <button class="hbtn" id="exportBtn" title="Exportar JSON">â¬‡</button>
+    <button class="hbtn" id="importBtn" title="Importar JSON">⬆</button>
+    <button class="hbtn" id="exportBtn" title="Exportar JSON">⬇</button>
   </div>
 </div>
 
 <!-- INSTALL BANNER -->
 <div id="installBanner">
-  <p>ðŸ“² Instala esta app en tu pantalla de inicio</p>
+  <p>📲 Instala esta app en tu pantalla de inicio</p>
   <button id="installBtn">Instalar</button>
-  <button class="dismiss-btn" id="dismissInstall">âœ•</button>
+  <button class="dismiss-btn" id="dismissInstall">✕</button>
 </div>
 
 <!-- SHARE RECEIVED BANNER -->
 <div id="shareBanner">
-  <div class="share-banner-title">ðŸ“¥ PÃGINA RECIBIDA PARA GUARDAR</div>
-  <div class="share-banner-url" id="shareBannerUrl">â€”</div>
+  <div class="share-banner-title">📥 PÁGINA RECIBIDA PARA GUARDAR</div>
+  <div class="share-banner-url" id="shareBannerUrl">—</div>
   <div class="share-banner-note" id="shareBannerNote"></div>
   <div class="share-col-row">
     <select class="share-col-select" id="shareColSelect"></select>
-    <button class="share-save-btn" id="shareSaveBtn">ðŸ’¾ Guardar</button>
-    <button class="share-dismiss" id="shareDismiss">âœ• Ignorar</button>
+    <button class="share-save-btn" id="shareSaveBtn">💾 Guardar</button>
+    <button class="share-dismiss" id="shareDismiss">✕ Ignorar</button>
   </div>
 </div>
 
@@ -199,7 +199,7 @@
 <div id="syncBar">
   <div id="syncDot"></div>
   <span id="syncLabel">Listo</span>
-  <span class="sync-hint" onclick="showSyncHelp()">Â¿Sincronizar?</span>
+  <span class="sync-hint" onclick="showSyncHelp()">¿Sincronizar?</span>
 </div>
 
 <!-- PAGES -->
@@ -208,97 +208,97 @@
   <!-- COLLECTIONS -->
   <div class="page" id="colPage">
     <div class="search-bar">
-      <input type="search" id="searchInput" placeholder="ðŸ” Buscar colecciones o elementosâ€¦"/>
+      <input type="search" id="searchInput" placeholder="🔍 Buscar colecciones o elementos…"/>
     </div>
     <div class="col-list" id="colList"></div>
-    <button class="fab" id="newColFab">ï¼‹</button>
+    <button class="fab" id="newColFab">＋</button>
   </div>
 
   <!-- ITEMS -->
   <div class="page hidden" id="itemPage">
     <div class="page-header">
-      <button class="back-btn" id="backToCollections">â€¹</button>
-      <h2 id="itemPageTitle">ColecciÃ³n</h2>
+      <button class="back-btn" id="backToCollections">‹</button>
+      <h2 id="itemPageTitle">Colección</h2>
       <div class="page-header-actions">
-        <button class="icon-btn" id="renameColBtn">âœï¸</button>
-        <button class="icon-btn" id="deleteColBtn" style="color:#e94560">ðŸ—‘ï¸</button>
+        <button class="icon-btn" id="renameColBtn">✏️</button>
+        <button class="icon-btn" id="deleteColBtn" style="color:#e94560">🗑️</button>
       </div>
     </div>
-    <div class="add-page-bar" id="addCurrentBar">âž• Agregar URL / texto</div>
+    <div class="add-page-bar" id="addCurrentBar">➕ Agregar URL / texto</div>
     <div class="items-list" id="itemsList"></div>
   </div>
 
   <!-- ADD FORM -->
   <div class="page hidden" id="addPage">
     <div class="page-header">
-      <button class="back-btn" id="backToItems">â€¹</button>
+      <button class="back-btn" id="backToItems">‹</button>
       <h2>Agregar elemento</h2>
     </div>
     <div class="add-form">
       <div class="form-group">
-        <label class="form-label">COLECCIÃ“N</label>
+        <label class="form-label">COLECCIÓN</label>
         <select class="form-input form-select" id="addTargetCol"></select>
       </div>
       <div class="section-divider">ENLACE / URL</div>
       <div class="form-group">
-        <label class="form-label">DIRECCIÃ“N WEB</label>
-        <input class="form-input" type="url" id="addUrl" placeholder="https://â€¦"/>
+        <label class="form-label">DIRECCIÓN WEB</label>
+        <input class="form-input" type="url" id="addUrl" placeholder="https://…"/>
       </div>
       <div class="form-group">
-        <label class="form-label">TÃTULO</label>
+        <label class="form-label">TÍTULO</label>
         <input class="form-input" type="text" id="addTitle" placeholder="Nombre del enlace"/>
       </div>
       <div class="form-group">
         <label class="form-label">NOTA (opcional)</label>
-        <textarea class="form-input" id="addNote" placeholder="Â¿Por quÃ© guardas este enlace?"></textarea>
+        <textarea class="form-input" id="addNote" placeholder="¿Por qué guardas este enlace?"></textarea>
       </div>
       <div class="btn-row">
         <button class="btn-ghost" id="cancelAdd">Cancelar</button>
-        <button class="btn-primary" id="confirmAdd">ðŸ’¾ Guardar enlace</button>
+        <button class="btn-primary" id="confirmAdd">💾 Guardar enlace</button>
       </div>
       <div class="section-divider">TEXTO / NOTA LIBRE</div>
       <div class="form-group">
         <label class="form-label">TEXTO</label>
-        <textarea class="form-input" id="addText" placeholder="Escribe o pega el texto que quieres guardarâ€¦" style="min-height:100px"></textarea>
+        <textarea class="form-input" id="addText" placeholder="Escribe o pega el texto que quieres guardar…" style="min-height:100px"></textarea>
       </div>
-      <button class="btn-primary" id="confirmAddText">ðŸ’¾ Guardar texto</button>
+      <button class="btn-primary" id="confirmAddText">💾 Guardar texto</button>
     </div>
   </div>
 
 </div>
 
-<!-- MODAL: Nueva colecciÃ³n -->
+<!-- MODAL: Nueva colección -->
 <div class="modal-overlay" id="newColModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>Nueva colecciÃ³n</h3>
+    <h3>Nueva colección</h3>
     <div class="form-group">
       <label class="form-label">NOMBRE</label>
-      <input class="form-input" type="text" id="newColName" placeholder="Ej: InvestigaciÃ³n, Recetasâ€¦" maxlength="40"/>
+      <input class="form-input" type="text" id="newColName" placeholder="Ej: Investigación, Recetas…" maxlength="40"/>
     </div>
     <div class="form-group">
-      <label class="form-label">ÃCONO</label>
+      <label class="form-label">ÍCONO</label>
       <div class="emoji-grid" id="emojiGrid">
-        <span class="emoji-opt selected" data-e="ðŸ“">ðŸ“</span>
-        <span class="emoji-opt" data-e="â­">â­</span>
-        <span class="emoji-opt" data-e="ðŸ”¬">ðŸ”¬</span>
-        <span class="emoji-opt" data-e="ðŸ“š">ðŸ“š</span>
-        <span class="emoji-opt" data-e="ðŸ½ï¸">ðŸ½ï¸</span>
-        <span class="emoji-opt" data-e="ðŸ’¡">ðŸ’¡</span>
-        <span class="emoji-opt" data-e="ðŸŽ¯">ðŸŽ¯</span>
-        <span class="emoji-opt" data-e="ðŸ›’">ðŸ›’</span>
-        <span class="emoji-opt" data-e="ðŸ§ª">ðŸ§ª</span>
-        <span class="emoji-opt" data-e="âœˆï¸">âœˆï¸</span>
-        <span class="emoji-opt" data-e="ðŸ’¼">ðŸ’¼</span>
-        <span class="emoji-opt" data-e="ðŸŽ¨">ðŸŽ¨</span>
-        <span class="emoji-opt" data-e="ðŸ ">ðŸ </span>
-        <span class="emoji-opt" data-e="ðŸ“">ðŸ“</span>
-        <span class="emoji-opt" data-e="ðŸ¤–">ðŸ¤–</span>
-        <span class="emoji-opt" data-e="ðŸŒ±">ðŸŒ±</span>
-        <span class="emoji-opt" data-e="ðŸ‹ï¸">ðŸ‹ï¸</span>
-        <span class="emoji-opt" data-e="ðŸŽµ">ðŸŽµ</span>
-        <span class="emoji-opt" data-e="ðŸ’Š">ðŸ’Š</span>
-        <span class="emoji-opt" data-e="ðŸ“Š">ðŸ“Š</span>
+        <span class="emoji-opt selected" data-e="📁">📁</span>
+        <span class="emoji-opt" data-e="⭐">⭐</span>
+        <span class="emoji-opt" data-e="🔬">🔬</span>
+        <span class="emoji-opt" data-e="📚">📚</span>
+        <span class="emoji-opt" data-e="🍽️">🍽️</span>
+        <span class="emoji-opt" data-e="💡">💡</span>
+        <span class="emoji-opt" data-e="🎯">🎯</span>
+        <span class="emoji-opt" data-e="🛒">🛒</span>
+        <span class="emoji-opt" data-e="🧪">🧪</span>
+        <span class="emoji-opt" data-e="✈️">✈️</span>
+        <span class="emoji-opt" data-e="💼">💼</span>
+        <span class="emoji-opt" data-e="🎨">🎨</span>
+        <span class="emoji-opt" data-e="🏠">🏠</span>
+        <span class="emoji-opt" data-e="📝">📝</span>
+        <span class="emoji-opt" data-e="🤖">🤖</span>
+        <span class="emoji-opt" data-e="🌱">🌱</span>
+        <span class="emoji-opt" data-e="🏋️">🏋️</span>
+        <span class="emoji-opt" data-e="🎵">🎵</span>
+        <span class="emoji-opt" data-e="💊">💊</span>
+        <span class="emoji-opt" data-e="📊">📊</span>
       </div>
     </div>
     <div class="btn-row">
@@ -312,16 +312,16 @@
 <div class="modal-overlay" id="syncModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>â˜ï¸ SincronizaciÃ³n entre dispositivos</h3>
+    <h3>☁️ Sincronización entre dispositivos</h3>
     <p style="font-size:13px;color:var(--text2);line-height:1.6">La PWA guarda los datos en este navegador. Para sincronizar entre dispositivos:</p>
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="background:var(--bg);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">
-        <strong style="color:var(--success)">OpciÃ³n 1 â€” Exportar / Importar</strong><br>
-        <span style="color:var(--text2)">â¬‡ Exportar en un dispositivo â†’ guardar en Drive â†’ â¬† Importar en otro. Formato compatible con la extensiÃ³n de Chrome.</span>
+        <strong style="color:var(--success)">Opción 1 — Exportar / Importar</strong><br>
+        <span style="color:var(--text2)">⬇ Exportar en un dispositivo → guardar en Drive → ⬆ Importar en otro. Formato compatible con la extensión de Chrome.</span>
       </div>
       <div style="background:var(--bg);border-radius:10px;padding:12px;font-size:13px;line-height:1.6">
-        <strong style="color:var(--warning)">OpciÃ³n 2 â€” ExtensiÃ³n Chrome</strong><br>
-        <span style="color:var(--text2)">En PC sin restricciones instala la extensiÃ³n MisColecciones v2 â€” sincroniza automÃ¡ticamente vÃ­a cuenta Google.</span>
+        <strong style="color:var(--warning)">Opción 2 — Extensión Chrome</strong><br>
+        <span style="color:var(--text2)">En PC sin restricciones instala la extensión MisColecciones v2 — sincroniza automáticamente vía cuenta Google.</span>
       </div>
     </div>
     <button class="btn-primary" onclick="document.getElementById('syncModal').classList.remove('open')">Entendido</button>
@@ -332,11 +332,11 @@
 <div id="toast"></div>
 
 <script>
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // STATE & STORAGE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 const STORAGE_KEY = 'miscolecciones_data';
-let app = { collections:[], currentColId:null, selectedEmoji:'ðŸ“', deferredInstall:null, pendingShare:null };
+let app = { collections:[], currentColId:null, selectedEmoji:'📁', deferredInstall:null, pendingShare:null };
 
 function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({ version:2, savedAt:new Date().toISOString(), collections:app.collections }));
@@ -353,9 +353,9 @@ function load() {
 function getCol(id) { return app.collections.find(c => c.id === id); }
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // UI HELPERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function esc(s) {
   if (!s) return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -371,14 +371,14 @@ function updateSyncBar(dirty=false) {
   try {
     const d = JSON.parse(localStorage.getItem(STORAGE_KEY));
     const t = d?.savedAt ? new Date(d.savedAt).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}) : null;
-    document.getElementById('syncLabel').textContent = dirty ? 'Cambios sin guardarâ€¦' : (t ? `Guardado ${t}` : 'Listo');
+    document.getElementById('syncLabel').textContent = dirty ? 'Cambios sin guardar…' : (t ? `Guardado ${t}` : 'Listo');
   } catch {}
 }
 function showSyncHelp() { document.getElementById('syncModal').classList.add('open'); }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // NAVIGATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function showPage(id, dir='forward') {
   document.querySelectorAll('.page').forEach(p => {
     const isTarget = p.id === id;
@@ -388,13 +388,13 @@ function showPage(id, dir='forward') {
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // SHARE BANNER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function populateShareColSelect() {
   const sel = document.getElementById('shareColSelect');
   sel.innerHTML = app.collections.length === 0
-    ? '<option value="">â€” Primero crea una colecciÃ³n â€”</option>'
+    ? '<option value="">— Primero crea una colección —</option>'
     : app.collections.map(c => `<option value="${c.id}">${c.emoji} ${esc(c.name)}</option>`).join('');
 }
 
@@ -402,7 +402,7 @@ function showShareBanner(shareData) {
   app.pendingShare = shareData;
   const urlText = shareData.url || shareData.text || '';
   const titleText = shareData.title || urlText;
-  document.getElementById('shareBannerUrl').textContent = titleText.substring(0, 80) + (titleText.length > 80 ? 'â€¦' : '');
+  document.getElementById('shareBannerUrl').textContent = titleText.substring(0, 80) + (titleText.length > 80 ? '…' : '');
   const noteEl = document.getElementById('shareBannerNote');
   if (shareData.url && shareData.text && shareData.text !== shareData.url) {
     noteEl.textContent = shareData.text.substring(0, 80);
@@ -418,11 +418,11 @@ function showShareBanner(shareData) {
 
 function saveSharedItem() {
   const colId = document.getElementById('shareColSelect').value;
-  if (!colId) { toast('Crea una colecciÃ³n primero', '#e94560'); return; }
+  if (!colId) { toast('Crea una colección primero', '#e94560'); return; }
   const col = getCol(colId);
   const sd = app.pendingShare;
   const url = sd.url || '';
-  const title = sd.title || url || 'Sin tÃ­tulo';
+  const title = sd.title || url || 'Sin título';
   col.items.push({
     type: url ? 'link' : 'text',
     title, url,
@@ -431,15 +431,15 @@ function saveSharedItem() {
     date: new Date().toISOString()
   });
   save();
-  toast(`âœ… Guardado en ${col.emoji} ${col.name}`);
+  toast(`✅ Guardado en ${col.emoji} ${col.name}`);
   document.getElementById('shareBanner').classList.remove('visible');
   app.pendingShare = null;
   renderCollections();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // RENDER COLLECTIONS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function renderCollections(filter='') {
   const list = document.getElementById('colList');
   list.innerHTML = '';
@@ -450,35 +450,35 @@ function renderCollections(filter='') {
 
   if (cols.length === 0 && !q) {
     list.innerHTML = `<div class="empty-state">
-      <div class="e-icon">ðŸ“</div>
-      <p>No tienes colecciones todavÃ­a.<br>Toca <strong>ï¼‹</strong> para crear una.</p>
-      <small>â˜ï¸ Exporta / Importa para sincronizar<br>entre dispositivos</small>
+      <div class="e-icon">📁</div>
+      <p>No tienes colecciones todavía.<br>Toca <strong>＋</strong> para crear una.</p>
+      <small>☁️ Exporta / Importa para sincronizar<br>entre dispositivos</small>
     </div>`;
     return;
   }
   if (cols.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="e-icon">ðŸ”</div><p>Sin resultados para "${esc(q)}"</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="e-icon">🔍</div><p>Sin resultados para "${esc(q)}"</p></div>`;
     return;
   }
   cols.forEach(col => {
-    const recent = col.items.length ? ` Â· ${new Date(col.items[col.items.length-1].date).toLocaleDateString('es-MX')}` : '';
+    const recent = col.items.length ? ` · ${new Date(col.items[col.items.length-1].date).toLocaleDateString('es-MX')}` : '';
     const card = document.createElement('div');
     card.className = 'col-card';
     card.innerHTML = `
-      <div class="col-emoji">${col.emoji||'ðŸ“'}</div>
+      <div class="col-emoji">${col.emoji||'📁'}</div>
       <div class="col-info">
         <div class="col-name">${esc(col.name)}</div>
         <div class="col-count">${col.items.length} elemento${col.items.length!==1?'s':''}${recent}</div>
       </div>
-      <div class="col-chevron">â€º</div>`;
+      <div class="col-chevron">›</div>`;
     card.onclick = () => openCol(col.id);
     list.appendChild(card);
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // ITEMS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function openCol(id) {
   app.currentColId = id;
   const col = getCol(id);
@@ -492,32 +492,32 @@ function renderItems(col) {
   const list = document.getElementById('itemsList');
   list.innerHTML = '';
   if (!col.items.length) {
-    list.innerHTML = `<div class="empty-state"><div class="e-icon">ðŸ“­</div><p>ColecciÃ³n vacÃ­a.<br>Toca el botÃ³n de arriba para agregar.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="e-icon">📭</div><p>Colección vacía.<br>Toca el botón de arriba para agregar.</p></div>`;
     return;
   }
   col.items.slice().reverse().forEach((item, ri) => {
     const idx = col.items.length - 1 - ri;
-    let thumb = {page:'ðŸŒ',link:'ðŸ”—',text:'ðŸ“',image:'ðŸ–¼ï¸'}[item.type]||'ðŸ“Œ';
+    let thumb = {page:'🌐',link:'🔗',text:'📝',image:'🖼️'}[item.type]||'📌';
     if (item.type==='page' && item.favicon) thumb = `<img src="${esc(item.favicon)}" onerror="this.style.display='none'"/>`;
     const urlDisplay = item.url || item.pageUrl || '';
-    const titleDisplay = item.title || (item.type==='text' ? (item.content||'').substring(0,60)+'â€¦' : '');
+    const titleDisplay = item.title || (item.type==='text' ? (item.content||'').substring(0,60)+'…' : '');
     const dateStr = item.date ? new Date(item.date).toLocaleDateString('es-MX') : '';
-    const typeLabel = {page:'PÃ¡gina',link:'Enlace',text:'Texto',image:'Imagen'}[item.type]||'Item';
+    const typeLabel = {page:'Página',link:'Enlace',text:'Texto',image:'Imagen'}[item.type]||'Item';
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
       <div class="item-thumb">${thumb}</div>
       <div class="item-body">
-        <div class="item-title">${esc(titleDisplay||'Sin tÃ­tulo')}</div>
+        <div class="item-title">${esc(titleDisplay||'Sin título')}</div>
         ${urlDisplay ? `<div class="item-url">${esc(urlDisplay)}</div>` : ''}
         <span class="item-type-badge badge-${item.type}">${typeLabel}</span>
         ${item.note ? `<div class="item-note">"${esc(item.note)}"</div>` : ''}
-        ${item.type==='text' ? `<div class="item-note" style="color:var(--text);margin-top:6px">${esc((item.content||'').substring(0,160))}${(item.content||'').length>160?'â€¦':''}</div>` : ''}
+        ${item.type==='text' ? `<div class="item-note" style="color:var(--text);margin-top:6px">${esc((item.content||'').substring(0,160))}${(item.content||'').length>160?'…':''}</div>` : ''}
         ${dateStr ? `<div class="item-url" style="margin-top:3px">${dateStr}</div>` : ''}
       </div>
       <div class="item-actions">
-        ${urlDisplay ? `<button class="icon-btn" onclick="openUrl('${esc(urlDisplay)}')" title="Abrir">â†—ï¸</button>` : ''}
-        <button class="icon-btn" onclick="deleteItem(${idx})" style="color:#e94560" title="Eliminar">ðŸ—‘ï¸</button>
+        ${urlDisplay ? `<button class="icon-btn" onclick="openUrl('${esc(urlDisplay)}')" title="Abrir">↗️</button>` : ''}
+        <button class="icon-btn" onclick="deleteItem(${idx})" style="color:#e94560" title="Eliminar">🗑️</button>
       </div>`;
     list.appendChild(card);
   });
@@ -525,16 +525,16 @@ function renderItems(col) {
 function openUrl(url) { window.open(url, '_blank', 'noopener'); }
 
 function deleteItem(idx) {
-  if (!confirm('Â¿Eliminar este elemento?')) return;
+  if (!confirm('¿Eliminar este elemento?')) return;
   const col = getCol(app.currentColId);
   col.items.splice(idx, 1);
   save(); renderItems(col);
   toast('Eliminado', '#f7b731');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // ADD FORM
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function openAddPage() {
   const sel = document.getElementById('addTargetCol');
   sel.innerHTML = app.collections.map(c => `<option value="${c.id}">${c.emoji} ${esc(c.name)}</option>`).join('');
@@ -549,11 +549,11 @@ function saveLink() {
   const note = document.getElementById('addNote').value.trim();
   const colId = document.getElementById('addTargetCol').value;
   if (!url) { toast('Ingresa una URL', '#e94560'); return; }
-  if (!colId) { toast('Selecciona una colecciÃ³n', '#e94560'); return; }
+  if (!colId) { toast('Selecciona una colección', '#e94560'); return; }
   const col = getCol(colId);
   col.items.push({ type:'link', title:title||url, url, favicon:'', note, date:new Date().toISOString() });
   save();
-  toast('âœ… Guardado en ' + col.name);
+  toast('✅ Guardado en ' + col.name);
   app.currentColId = colId;
   renderItems(col);
   document.getElementById('itemPageTitle').textContent = col.emoji+' '+col.name;
@@ -564,27 +564,27 @@ function saveText() {
   const text = document.getElementById('addText').value.trim();
   const colId = document.getElementById('addTargetCol').value;
   if (!text) { toast('Escribe algo', '#e94560'); return; }
-  if (!colId) { toast('Selecciona una colecciÃ³n', '#e94560'); return; }
+  if (!colId) { toast('Selecciona una colección', '#e94560'); return; }
   const col = getCol(colId);
-  col.items.push({ type:'text', title:text.substring(0,60)+(text.length>60?'â€¦':''), content:text, note:'', date:new Date().toISOString() });
+  col.items.push({ type:'text', title:text.substring(0,60)+(text.length>60?'…':''), content:text, note:'', date:new Date().toISOString() });
   save();
-  toast('âœ… Texto guardado');
+  toast('✅ Texto guardado');
   app.currentColId = colId;
   renderItems(col);
   document.getElementById('itemPageTitle').textContent = col.emoji+' '+col.name;
   showPage('itemPage','back');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // EXPORT / IMPORT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function doExport() {
   const blob = new Blob([JSON.stringify({version:2,exportDate:new Date().toISOString(),collections:app.collections},null,2)],{type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `MisColecciones_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
-  toast('âœ… Exportado');
+  toast('✅ Exportado');
 }
 function doImport() { document.getElementById('importFile').click(); }
 async function handleImport(file) {
@@ -597,17 +597,17 @@ async function handleImport(file) {
       if (!app.collections.find(c=>c.id===col.id)) { app.collections.push(col); added++; } else skipped++;
     });
     save(); renderCollections();
-    toast(`âœ… ${added} importadas, ${skipped} ya existÃ­an`);
-  } catch(e) { toast('âŒ Error: '+e.message,'#e94560'); }
+    toast(`✅ ${added} importadas, ${skipped} ya existían`);
+  } catch(e) { toast('❌ Error: '+e.message,'#e94560'); }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // NEW COLLECTION MODAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 function openNewColModal() {
   document.getElementById('newColName').value = '';
-  app.selectedEmoji = 'ðŸ“';
-  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.toggle('selected', e.dataset.e==='ðŸ“'));
+  app.selectedEmoji = '📁';
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.toggle('selected', e.dataset.e==='📁'));
   document.getElementById('newColModal').classList.add('open');
   setTimeout(() => document.getElementById('newColName').focus(), 300);
 }
@@ -619,16 +619,16 @@ function createCollection() {
   save(); closeNewColModal(); renderCollections();
   // Also update share select if banner is open
   if (document.getElementById('shareBanner').classList.contains('visible')) populateShareColSelect();
-  toast('âœ… ColecciÃ³n: ' + name);
+  toast('✅ Colección: ' + name);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 // INIT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   load();
 
-  // â”€â”€ Check for incoming share (Web Share Target) â”€â”€
+  // ── Check for incoming share (Web Share Target) ──
   const params = new URLSearchParams(location.search);
   const sharedUrl   = params.get('url')   || '';
   const sharedTitle = params.get('title') || '';
@@ -661,13 +661,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const col = getCol(app.currentColId);
     if (!col) return;
     const n = prompt('Nuevo nombre:', col.name);
-    if (n?.trim()) { col.name=n.trim(); save(); document.getElementById('itemPageTitle').textContent=col.emoji+' '+col.name; toast('âœ… Nombre actualizado'); }
+    if (n?.trim()) { col.name=n.trim(); save(); document.getElementById('itemPageTitle').textContent=col.emoji+' '+col.name; toast('✅ Nombre actualizado'); }
   };
   document.getElementById('deleteColBtn').onclick = () => {
-    if (!confirm('Â¿Eliminar esta colecciÃ³n?')) return;
+    if (!confirm('¿Eliminar esta colección?')) return;
     app.collections = app.collections.filter(c=>c.id!==app.currentColId);
     save(); showPage('colPage','back'); renderCollections();
-    toast('ColecciÃ³n eliminada','#e94560');
+    toast('Colección eliminada','#e94560');
   };
 
   // Add form
