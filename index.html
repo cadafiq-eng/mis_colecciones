@@ -1024,17 +1024,26 @@ async function loadCollections(silent = false) {
   if (!silent) setSyncPill('syncing');
   try {
     if (S.useCloud && db) {
+      // ── DIAGNÓSTICO: mostrar qué usuario se está consultando ──
+      console.log('🔍 Consultando Supabase con user_id:', S.user?.id);
+
       const { data, error } = await db
         .from('collections')
         .select('*')
         .eq('user_id', S.user.id)
         .order('created_at', { ascending: false });
+
+      // ── DIAGNÓSTICO: mostrar resultado ──
+      console.log('📦 Resultado Supabase:', { data, error });
+      if (!silent) toast('☁️ Supabase: ' + (error ? '❌ ' + error.message : (data?.length ?? 0) + ' colecciones encontradas'));
+
       if (error) throw error;
       S.collections = (data || []).map(normalizeCol);
       setSyncPill('synced');
     } else {
       const raw = localStorage.getItem('mis_colecciones');
       S.collections = raw ? JSON.parse(raw) : [];
+      if (!silent) toast('💾 Local: ' + S.collections.length + ' colecciones');
       setSyncPill('offline');
     }
     renderCollections();
@@ -1044,7 +1053,7 @@ async function loadCollections(silent = false) {
   } catch(err) {
     console.error('loadCollections:', err);
     setSyncPill('error');
-    toast('Error al cargar: ' + err.message);
+    toast('❌ Error al cargar: ' + err.message);
   }
 }
 
