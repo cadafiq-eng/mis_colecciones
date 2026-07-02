@@ -1420,23 +1420,63 @@ $('importFile').addEventListener('change', async e => {
     try {
       const data = JSON.parse(evt.target.result);
       if (!Array.isArray(data.collections)) throw new Error('Formato inválido');
-      const existing = new Set(S.collections.map(c => c.id));
-      const newCols  = data.collections.filter(c => !existing.has(c.id));
-      if (S.useCloud && db) {
-        for (const col of newCols) {
-          await db.from('collections').insert([{ ...col, user_id: S.user.id }]);
-        }
-      } else {
-        S.collections.push(...newCols);
-        saveLocal();
+
+      // Normalizar items: soporta formato antiguo (date, sin id) y nuevo (saved_at, con id)
+      const normalize = col => ({
+        ...col,
+        description: col.description || '',
+        items: (col.items || []).map((it, i) => ({
+          id:       it.id       || 'item_imp_' + Date.now() + '_' + i,
+          url:      it.url      || '',
+          title:    it.title    || '',
+          favicon:  it.favicon  || '',
+          note:     it.note     || '',
+          saved_at: it.saved_at || it.date || new Date().toISOString(),
+        }))
+      });
+
+      // Detectar duplicados por nombre (no por id, ya que los ids antiguos no son UUID)
+      const existingNames = new Set(S.collections.map(c => c.name.toLowerCase().trim()));
+      const newCols = data.collections
+        .filter(c => !existingNames.has((c.name || '').toLowerCase().trim()))
+        .map(normalize);
+
+      if (!newCols.length) {
+        toast('ℹ️ Todas las colecciones ya existen');
+        return;
       }
-      await loadCollections();
-      toast(`✅ ${newCols.length} colecciones importadas`);
-    } catch(err) { toast('Error al importar: ' + err.message); }
+
+      if (S.useCloud && db) {
+        let ok = 0, fail = 0;
+        for (const col of newCols) {
+          // Quitar el id antiguo — Supabase genera UUID automáticamente
+          const { id, emoji, ...colClean } = col;
+          const { error } = await db.from('collections')
+            .insert([{ ...colClean, user_id: S.user.id }]);
+          if (error) { console.warn('Import error:', error); fail++; }
+          else ok++;
+        }
+        await loadCollections();
+        toast(fail ? `⚠️ ${ok} importadas, ${fail} con error` : `✅ ${ok} colecciones importadas`);
+      } else {
+        const toAdd = newCols.map(col => ({
+          ...col,
+          id: 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        }));
+        S.collections.push(...toAdd);
+        saveLocal();
+        await loadCollections();
+        toast(`✅ ${toAdd.length} colecciones importadas (local)`);
+      }
+    } catch(err) {
+      toast('❌ Error al importar: ' + err.message);
+      console.error(err);
+    }
   };
   reader.readAsText(file);
   e.target.value = '';
 });
+
 
 /* ================================================================
    EVENT BINDING
