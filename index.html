@@ -698,12 +698,12 @@
     </div>
   </header>
   <!-- USER EMAIL STRIP -->
-  <div id="userEmailBar" style="display:none;background:rgba(78,204,163,.12);border-bottom:1px solid rgba(78,204,163,.2);padding:5px 14px;font-size:11px;color:#4ecca3;display:none;align-items:center;gap:6px;">
+  <div id="userEmailBar" style="display:none;background:rgba(78,204,163,.12);border-bottom:1px solid rgba(78,204,163,.2);padding:5px 14px;font-size:11px;color:#4ecca3;align-items:center;gap:6px;">
     <span>👤</span><span id="userEmailTxt"></span>
   </div>
 
 
-  <!-- ═══════════ AUTH STRIP ═══════════ -->
+  <!-- ═════════ AUTH STRIP ═════════ -->
   <div class="auth-strip" id="authStrip">
     <div class="auth-strip-top" id="authToggle">
       <span>☁️</span>
@@ -712,10 +712,14 @@
     </div>
     <div class="auth-form-wrap" id="authWrap">
       <div class="auth-form-inner">
-        <input type="email"    class="a-input" id="emailInp"    placeholder="tu@email.com"  autocomplete="email"/>
-        <input type="password" class="a-input" id="passInp"     placeholder="Contraseña"    autocomplete="current-password"/>
-        <button class="a-btn"  id="signInBtn">Iniciar sesión / Registrarse</button>
-        <div class="a-status"  id="authStatus"></div>
+        <input type="email"    class="a-input" id="emailInp" placeholder="tu@email.com" autocomplete="email"/>
+        <input type="password" class="a-input" id="passInp"  placeholder="Contraseña"   autocomplete="current-password"/>
+        <button class="a-btn" id="signInBtn">Iniciar sesión</button>
+        <div style="display:flex;gap:8px;margin-top:-4px">
+          <button class="a-btn" id="signUpBtn"  style="background:var(--surface3);color:var(--text);font-size:13px">Crear cuenta</button>
+          <button class="a-btn" id="forgotBtn"  style="background:transparent;color:var(--text2);font-size:13px;border:1px solid var(--border)">¿Olvidaste tu contraseña?</button>
+        </div>
+        <div class="a-status" id="authStatus"></div>
       </div>
     </div>
   </div>
@@ -875,10 +879,37 @@ $('themeBtn').addEventListener('click', () => applyTheme(S.theme === 'dark' ? 'l
    ================================================================ */
 async function init() {
   applyTheme(S.theme);
+
+  // ── Listener de estado: corrige la recarga al iniciar ──
+  // Supabase restaura la sesión de forma asíncrona desde localStorage.
+  // Este listener garantiza que la UI se actualiza cuando la sesión llega.
+  if (db) {
+    db.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        if (!S.user || S.user.id !== session.user.id) {
+          S.user = session.user;
+          S.useCloud = true;
+          updateAuthUI();
+          subscribeRealtime();
+          loadCollections();
+        }
+      } else if (event === 'SIGNED_OUT') {
+        S.user = null;
+        S.useCloud = false;
+        S.collections = [];
+        updateAuthUI();
+        renderCollections();
+      } else if (event === 'TOKEN_REFRESHED' && session) {
+        S.user = session.user; // mantener datos actualizados
+      }
+    });
+  }
+
   await checkAuth();
   await loadCollections();
   bindEvents();
 }
+
 
 /* ================================================================
    AUTH
@@ -904,6 +935,7 @@ $('authToggle').addEventListener('click', () => {
   chev.classList.toggle('open', open);
 });
 
+// ── Botón Iniciar sesión ──
 $('signInBtn').addEventListener('click', async () => {
   const email = $('emailInp').value.trim();
   const pw    = $('passInp').value;
@@ -911,34 +943,72 @@ $('signInBtn').addEventListener('click', async () => {
   if (!db)           { showAuthMsg('Sin conexión a la nube', 'error'); return; }
 
   const btn = $('signInBtn');
-  btn.disabled = true; btn.textContent = 'Procesando...';
-  showAuthMsg('Verificando...', 'info');
+  btn.disabled = true; btn.textContent = 'Verificando...';
 
   try {
-    let { data, error } = await db.auth.signInWithPassword({ email, password: pw });
-    if (error) {
-      // Try sign-up if credentials don't exist
-      ({ data, error } = await db.auth.signUp({ email, password: pw }));
-      if (error) throw error;
-      if (!data.session) {
-        showAuthMsg('✉️ Revisa tu email para confirmar la cuenta', 'success');
-        return;
-      }
-    }
-    if (data?.session) {
-      S.user = data.session.user;
-      S.useCloud = true;
-      updateAuthUI();
-      subscribeRealtime();
-      await loadCollections();
-      toast('✅ Sesión iniciada correctamente');
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pw });
+    if (error) throw error;
+    // El onAuthStateChange se encarga del resto
+    toast('✅ Sesión iniciada');
+    $('authWrap').classList.remove('open');
+    $('authChevron').classList.remove('open');
+  } catch(err) {
+    showAuthMsg('Correo o contraseña incorrectos', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Iniciar sesión';
+  }
+});
+
+// ── Botón Crear cuenta ──
+$('signUpBtn').addEventListener('click', async () => {
+  const email = $('emailInp').value.trim();
+  const pw    = $('passInp').value;
+  if (!email || !pw) { showAuthMsg('Email y contraseña requeridos', 'error'); return; }
+  if (pw.length < 6)  { showAuthMsg('La contraseña debe tener mínimo 6 caracteres', 'error'); return; }
+  if (!db)            { showAuthMsg('Sin conexión a la nube', 'error'); return; }
+
+  const btn = $('signUpBtn');
+  btn.disabled = true; btn.textContent = 'Creando...';
+
+  try {
+    const { data, error } = await db.auth.signUp({ email, password: pw });
+    if (error) throw error;
+    if (data.session) {
+      toast('✅ Cuenta creada e ingresada');
+      $('authWrap').classList.remove('open');
+      $('authChevron').classList.remove('open');
+    } else {
+      showAuthMsg('✉️ Revisa tu email para confirmar la cuenta', 'success');
     }
   } catch(err) {
     showAuthMsg('Error: ' + (err.message || 'Intenta de nuevo'), 'error');
   } finally {
-    btn.disabled = false; btn.textContent = 'Iniciar sesión / Registrarse';
+    btn.disabled = false; btn.textContent = 'Crear cuenta';
   }
 });
+
+// ── Botón Olvidaste contraseña ──
+$('forgotBtn').addEventListener('click', async () => {
+  const email = $('emailInp').value.trim();
+  if (!email) { showAuthMsg('Escribe tu email arriba primero', 'error'); return; }
+  if (!db)    { showAuthMsg('Sin conexión a la nube', 'error'); return; }
+
+  const btn = $('forgotBtn');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  try {
+    const { error } = await db.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://cadafiq-eng.github.io/mis_colecciones/'
+    });
+    if (error) throw error;
+    showAuthMsg('✉️ Email de recuperación enviado. Revisa tu bandeja.', 'success');
+  } catch(err) {
+    showAuthMsg('Error: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '¿Olvidaste tu contraseña?';
+  }
+});
+
 
 $('signOutBtn').addEventListener('click', async () => {
   if (db) await db.auth.signOut().catch(()=>{});
@@ -957,13 +1027,11 @@ function updateAuthUI() {
   const emailBar = $('userEmailBar');
   const emailTxt = $('userEmailTxt');
   if (S.user) {
-    strip.style.display  = 'none';
-    outBtn.style.display = 'block';
-    // Mostrar email del usuario logueado
+    strip.style.display    = 'none';
+    outBtn.style.display   = 'block';
     emailBar.style.display = 'flex';
-    emailTxt.textContent   = S.user.email + '  (ID: ' + S.user.id.slice(0,8) + '...)';
+    emailTxt.textContent   = '☁️  ' + S.user.email;
     setSyncPill('synced');
-    console.log('✅ Usuario logueado:', S.user.email, '| ID:', S.user.id);
   } else {
     strip.style.display    = '';
     outBtn.style.display   = 'none';
@@ -971,6 +1039,7 @@ function updateAuthUI() {
     setSyncPill('offline');
   }
 }
+
 
 function showAuthMsg(msg, type) {
   const el = $('authStatus');
