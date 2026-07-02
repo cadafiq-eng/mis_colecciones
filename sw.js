@@ -3,7 +3,7 @@
  * Cache-first para assets locales, Network-first para APIs externas.
  */
 
-const CACHE_VER  = 'mc-v3';
+const CACHE_VER  = 'mc-v4';
 const STATIC = [
   './',
   './index.html',

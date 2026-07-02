@@ -264,35 +264,40 @@
     .a-status.info    { background: rgba(80,150,230,.15); color: #60a8ff;         }
 
     /* ============================================================
-       SCREENS CONTAINER
+       SCREENS CONTAINER — iOS-safe layout
        ============================================================ */
     .screens {
       flex: 1;
+      min-height: 0;        /* fix flex collapse in iOS */
       overflow: hidden;
       position: relative;
     }
+    /* Horizontal slider — más compatible con iOS que position:absolute */
+    .screens-inner {
+      display: flex;
+      flex-direction: row;
+      width: 200%;
+      height: 100%;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+    }
+    .screens-inner.show-detail { transform: translateX(-50%); }
+
     .screen {
-      position: absolute;
-      inset: 0;
+      width: 50%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-      will-change: transform;
       background: var(--bg);
+      min-height: 0;
     }
-    /* Screen 1: Collections */
-    #sCols                 { transform: translateX(0); }
-    #sCols.slide-left      { transform: translateX(-30%); }
-    /* Screen 2: Detail */
-    #sDetail               { transform: translateX(100%); }
-    #sDetail.slide-in      { transform: translateX(0); }
 
     .screen-body {
       flex: 1;
+      min-height: 0;        /* evita colapso en iOS */
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
+      overscroll-behavior-y: contain;
       padding: 12px;
       padding-bottom: calc(88px + var(--sab));
     }
@@ -717,34 +722,37 @@
 
   <!-- ═══════════ SCREENS ═══════════ -->
   <div class="screens">
+    <div class="screens-inner" id="screensInner">
 
-    <!-- Screen 1: Colecciones -->
-    <div class="screen" id="sCols">
-      <div class="screen-body" id="sColsBody">
-        <div class="cols-list" id="colsList">
-          <div class="empty">
-            <div class="empty-icon">📚</div>
-            <h3>Sin colecciones aún</h3>
-            <p>Presiona el botón + para crear tu primera colección</p>
+      <!-- Screen 1: Colecciones -->
+      <div class="screen" id="sCols">
+        <div class="screen-body" id="sColsBody">
+          <div class="cols-list" id="colsList">
+            <div class="empty">
+              <div class="empty-icon">📚</div>
+              <h3>Sin colecciones aún</h3>
+              <p>Presiona el botón + para crear tu primera colección</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Screen 2: Detalle de colección -->
-    <div class="screen" id="sDetail">
-      <div class="screen-body" id="sDetailBody">
-        <div class="items-list" id="itemsList">
-          <div class="empty">
-            <div class="empty-icon">🔗</div>
-            <h3>Sin páginas aún</h3>
-            <p>Presiona + para agregar tu primera página web</p>
+      <!-- Screen 2: Detalle de colección -->
+      <div class="screen" id="sDetail">
+        <div class="screen-body" id="sDetailBody">
+          <div class="items-list" id="itemsList">
+            <div class="empty">
+              <div class="empty-icon">🔗</div>
+              <h3>Sin páginas aún</h3>
+              <p>Presiona + para agregar tu primera página web</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
+    </div><!-- /screens-inner -->
   </div><!-- /screens -->
+
 </div><!-- /app-wrapper -->
 
 <!-- FAB -->
@@ -996,26 +1004,24 @@ function navigateTo(view, colId) {
   S.view = view;
   S.currentColId = colId || null;
 
-  const scCols   = $('sCols');
-  const scDetail = $('sDetail');
-  const backBtn  = $('backBtn');
-  const hdrTtl   = $('hdrTitle');
+  const inner  = $('screensInner');
+  const backBtn = $('backBtn');
+  const hdrTtl  = $('hdrTitle');
 
   if (view === 'detail') {
     const col = S.collections.find(c => c.id === colId);
-    scCols.classList.add('slide-left');
-    scDetail.classList.add('slide-in');
+    inner.classList.add('show-detail');
     backBtn.classList.add('show');
     hdrTtl.textContent = col ? col.name : 'Colección';
     renderItems(col);
     $('sDetailBody').scrollTop = 0;
   } else {
-    scCols.classList.remove('slide-left');
-    scDetail.classList.remove('slide-in');
+    inner.classList.remove('show-detail');
     backBtn.classList.remove('show');
     hdrTtl.textContent = '🗂️ MisColecciones';
   }
 }
+
 
 /* ================================================================
    LOAD COLLECTIONS
@@ -1468,12 +1474,12 @@ function bindEvents() {
   $('exportBtn').addEventListener('click', exportData);
   $('importBtn').addEventListener('click', () => $('importFile').click());
 
-  // Swipe right to go back (iOS style)
+  // Swipe derecha para volver atrás (gesto iOS)
   let touchStartX = 0;
   $('sDetail').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
   $('sDetail').addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (dx > 80 && touchStartX < 40) navigateTo('collections');
+    if (dx > 80 && touchStartX < 50) navigateTo('collections');
   }, { passive: true });
 }
 
