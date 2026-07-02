@@ -1616,6 +1616,14 @@ if ('serviceWorker' in navigator) {
       .then(r => console.log('✅ SW registered, scope:', r.scope))
       .catch(e => console.warn('SW registration failed:', e));
   });
+
+  // Auto-recarga cuando el SW activa una nueva versión
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data?.type === 'SW_UPDATED') {
+      console.log('🔄 Nueva versión disponible — recargando...');
+      window.location.reload();
+    }
+  });
 }
 </script>
 
