@@ -4,7 +4,7 @@
  * Auto-update: cuando hay una nueva versión, avisa a la app para recargar.
  */
 
-const CACHE_VER = 'mc-v6';
+const CACHE_VER = 'mc-v7';
 const STATIC = [
   './',
   './index.html',
