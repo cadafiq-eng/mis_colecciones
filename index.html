@@ -264,44 +264,35 @@
     .a-status.info    { background: rgba(80,150,230,.15); color: #60a8ff;         }
 
     /* ============================================================
-       SCREENS CONTAINER — iOS-safe layout
+       SCREENS CONTAINER
        ============================================================ */
     .screens {
       flex: 1;
-      min-height: 0;        /* fix flex collapse in iOS */
+      min-height: 0;        /* evita colapso en iOS */
       overflow: hidden;
       position: relative;
     }
-    /* Horizontal slider — más compatible con iOS que position:absolute */
-    .screens-inner {
-      display: flex;
-      flex-direction: row;
-      width: 200%;
-      height: 100%;
-      transition: transform .35s cubic-bezier(.4,0,.2,1);
-      will-change: transform;
-    }
-    .screens-inner.show-detail { transform: translateX(-50%); }
-
     .screen {
-      width: 50%;
-      height: 100%;
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0; /* compatible con todos los iOS */
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
       background: var(--bg);
-      min-height: 0;
-      position: relative;   /* necesario para que .screen-body use absolute */
     }
+    /* Navegación entre pantallas */
+    #sCols                { transform: translateX(0); }
+    #sCols.slide-left     { transform: translateX(-30%); }
+    #sDetail              { transform: translateX(100%); }
+    #sDetail.slide-in     { transform: translateX(0); }
 
     .screen-body {
-      /* position:absolute es el fix definitivo para scroll en iOS Safari:
-         da un alto de píxeles real al contenedor sin depender de flex */
+      /* position:absolute da al contenedor un alto en píxeles real,
+         solucionando el scroll en iOS Safari */
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; right: 0; bottom: 0; left: 0;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
@@ -309,6 +300,7 @@
       padding: 12px;
       padding-bottom: calc(88px + var(--sab));
     }
+
 
     /* ============================================================
        EMPTY STATE
@@ -735,36 +727,35 @@
 
   <!-- ═══════════ SCREENS ═══════════ -->
   <div class="screens">
-    <div class="screens-inner" id="screensInner">
 
-      <!-- Screen 1: Colecciones -->
-      <div class="screen" id="sCols">
-        <div class="screen-body" id="sColsBody">
-          <div class="cols-list" id="colsList">
-            <div class="empty">
-              <div class="empty-icon">📚</div>
-              <h3>Sin colecciones aún</h3>
-              <p>Presiona el botón + para crear tu primera colección</p>
-            </div>
+    <!-- Screen 1: Colecciones -->
+    <div class="screen" id="sCols">
+      <div class="screen-body" id="sColsBody">
+        <div class="cols-list" id="colsList">
+          <div class="empty">
+            <div class="empty-icon">📚</div>
+            <h3>Sin colecciones aún</h3>
+            <p>Presiona el botón + para crear tu primera colección</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Screen 2: Detalle de colección -->
-      <div class="screen" id="sDetail">
-        <div class="screen-body" id="sDetailBody">
-          <div class="items-list" id="itemsList">
-            <div class="empty">
-              <div class="empty-icon">🔗</div>
-              <h3>Sin páginas aún</h3>
-              <p>Presiona + para agregar tu primera página web</p>
-            </div>
+    <!-- Screen 2: Detalle de colección -->
+    <div class="screen" id="sDetail">
+      <div class="screen-body" id="sDetailBody">
+        <div class="items-list" id="itemsList">
+          <div class="empty">
+            <div class="empty-icon">🔗</div>
+            <h3>Sin páginas aún</h3>
+            <p>Presiona + para agregar tu primera página web</p>
           </div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /screens-inner -->
   </div><!-- /screens -->
+
 
 </div><!-- /app-wrapper -->
 
@@ -1082,24 +1073,26 @@ function navigateTo(view, colId) {
   S.view = view;
   S.currentColId = colId || null;
 
-  const inner  = $('screensInner');
-  const backBtn = $('backBtn');
-  const hdrTtl  = $('hdrTitle');
+  const scCols   = $('sCols');
+  const scDetail = $('sDetail');
+  const backBtn  = $('backBtn');
+  const hdrTtl   = $('hdrTitle');
 
   if (view === 'detail') {
     const col = S.collections.find(c => c.id === colId);
-    inner.classList.add('show-detail');
+    scCols.classList.add('slide-left');
+    scDetail.classList.add('slide-in');
     backBtn.classList.add('show');
     hdrTtl.textContent = col ? col.name : 'Colección';
     renderItems(col);
     $('sDetailBody').scrollTop = 0;
   } else {
-    inner.classList.remove('show-detail');
+    scCols.classList.remove('slide-left');
+    scDetail.classList.remove('slide-in');
     backBtn.classList.remove('show');
     hdrTtl.textContent = '🗂️ MisColecciones';
   }
 }
-
 
 /* ================================================================
    LOAD COLLECTIONS
@@ -1108,26 +1101,17 @@ async function loadCollections(silent = false) {
   if (!silent) setSyncPill('syncing');
   try {
     if (S.useCloud && db) {
-      // ── DIAGNÓSTICO: mostrar qué usuario se está consultando ──
-      console.log('🔍 Consultando Supabase con user_id:', S.user?.id);
-
       const { data, error } = await db
         .from('collections')
         .select('*')
         .eq('user_id', S.user.id)
         .order('created_at', { ascending: false });
-
-      // ── DIAGNÓSTICO: mostrar resultado ──
-      console.log('📦 Resultado Supabase:', { data, error });
-      if (!silent) toast('☁️ Supabase: ' + (error ? '❌ ' + error.message : (data?.length ?? 0) + ' colecciones encontradas'));
-
       if (error) throw error;
       S.collections = (data || []).map(normalizeCol);
       setSyncPill('synced');
     } else {
       const raw = localStorage.getItem('mis_colecciones');
       S.collections = raw ? JSON.parse(raw) : [];
-      if (!silent) toast('💾 Local: ' + S.collections.length + ' colecciones');
       setSyncPill('offline');
     }
     renderCollections();
@@ -1140,6 +1124,7 @@ async function loadCollections(silent = false) {
     toast('❌ Error al cargar: ' + err.message);
   }
 }
+
 
 function normalizeCol(c) {
   let items = c.items;
