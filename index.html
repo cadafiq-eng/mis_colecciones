@@ -285,19 +285,27 @@
 
     .screen {
       width: 50%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       background: var(--bg);
       min-height: 0;
+      position: relative;   /* necesario para que .screen-body use absolute */
     }
 
     .screen-body {
-      flex: 1;
-      min-height: 0;        /* evita colapso en iOS */
-      overflow-y: auto;
+      /* position:absolute es el fix definitivo para scroll en iOS Safari:
+         da un alto de píxeles real al contenedor sin depender de flex */
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
+      touch-action: pan-y;
       padding: 12px;
       padding-bottom: calc(88px + var(--sab));
     }
@@ -513,6 +521,7 @@
       max-height: 88vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;  /* fix scroll táctil en iOS/Android */
       padding: 20px 16px calc(18px + var(--sab));
       display: flex;
       flex-direction: column;
