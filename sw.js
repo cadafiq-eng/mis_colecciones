@@ -1,10 +1,10 @@
 /**
- * MisColecciones — Service Worker v5
+ * MisColecciones — Service Worker v8
  * Cache-first para assets locales, Network-first para APIs externas.
  * Auto-update: cuando hay una nueva versión, avisa a la app para recargar.
  */
 
-const CACHE_VER = 'mc-v5';
+const CACHE_VER = 'mc-v8';
 const STATIC = [
   './',
   './index.html',
