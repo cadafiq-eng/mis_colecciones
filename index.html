@@ -883,19 +883,32 @@ $('themeBtn').addEventListener('click', () => applyTheme(S.theme === 'dark' ? 'l
 async function init() {
   applyTheme(S.theme);
 
-  // ── Listener de estado: corrige la recarga al iniciar ──
-  // Supabase restaura la sesión de forma asíncrona desde localStorage.
-  // Este listener garantiza que la UI se actualiza cuando la sesión llega.
+  // Mostrar datos locales inmediatamente (sin esperar auth)
+  // Así el usuario ve algo en pantalla desde el primer momento.
+  try {
+    const raw = localStorage.getItem('mis_colecciones');
+    if (raw) { S.collections = JSON.parse(raw); renderCollections(); }
+  } catch(_) {}
+
   if (db) {
+    // onAuthStateChange es la forma CORRECTA de restaurar sesión en Supabase.
+    // Fires:  INITIAL_SESSION → cuando hay sesión guardada al abrir la app
+    //         SIGNED_IN       → cuando el usuario hace login manual
+    //         SIGNED_OUT      → cuando hace logout
+    //         TOKEN_REFRESHED → cuando el token se renueva automáticamente
     db.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
+      if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && session) {
+        // Solo actuar si es un usuario diferente (evita trabajo doble)
         if (!S.user || S.user.id !== session.user.id) {
           S.user = session.user;
           S.useCloud = true;
           updateAuthUI();
           subscribeRealtime();
-          loadCollections();
+          loadCollections();     // carga desde Supabase
         }
+      } else if (event === 'INITIAL_SESSION' && !session) {
+        // Sin sesión: mostrar modo offline con datos locales
+        setSyncPill('offline');
       } else if (event === 'SIGNED_OUT') {
         S.user = null;
         S.useCloud = false;
@@ -903,14 +916,13 @@ async function init() {
         updateAuthUI();
         renderCollections();
       } else if (event === 'TOKEN_REFRESHED' && session) {
-        S.user = session.user; // mantener datos actualizados
+        S.user = session.user;
       }
     });
   }
 
-  await checkAuth();
-  await loadCollections();
   bindEvents();
+  // fixLayout se llama desde el script al final del body
 }
 
 
@@ -1610,45 +1622,38 @@ init();
 
 <!-- iOS height fix + Service Worker -->
 <script>
-/* ── fixLayout: asigna altura real a .screens en iOS Safari PWA ──
-   iOS Safari (especialmente en modo standalone) no propaga correctamente
-   la altura a través de flex, dejando .screens con height:0.
-   Medimos el espacio disponible y lo asignamos explícitamente. */
+/* ── fixLayout: asigna altura real a .screens en iOS Safari PWA ── */
 function fixLayout() {
-  const screens = document.querySelector('.screens');
+  const screens   = document.querySelector('.screens');
   if (!screens) return;
-  const header   = document.querySelector('.app-header');
-  const emailBar = document.getElementById('userEmailBar');
+  const header    = document.querySelector('.app-header');
+  const emailBar  = document.getElementById('userEmailBar');
   const authStrip = document.getElementById('authStrip');
 
-  const total     = window.innerHeight;
-  const headerH   = header   ? header.getBoundingClientRect().height   : 0;
-  const emailH    = (emailBar  && emailBar.style.display  !== 'none')
-                    ? emailBar.getBoundingClientRect().height  : 0;
-  const authH     = (authStrip && authStrip.style.display !== 'none')
-                    ? authStrip.getBoundingClientRect().height : 0;
+  const total    = window.innerHeight;
+  const headerH  = header   ? header.getBoundingClientRect().height : 0;
+  const emailH   = (emailBar  && emailBar.style.display  !== 'none') ? emailBar.getBoundingClientRect().height  : 0;
+  const authH    = (authStrip && authStrip.style.display !== 'none') ? authStrip.getBoundingClientRect().height : 0;
 
-  const available = Math.max(total - headerH - emailH - authH, 100);
-  screens.style.height = available + 'px';
+  screens.style.height = Math.max(total - headerH - emailH - authH, 100) + 'px';
 }
 
 window.addEventListener('resize',            fixLayout, { passive: true });
 window.addEventListener('orientationchange', () => setTimeout(fixLayout, 200), { passive: true });
-// Primera llamada después de que el DOM esté pintado
 requestAnimationFrame(() => requestAnimationFrame(fixLayout));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js', { scope: './' })
-      .then(r => console.log('✅ SW registered, scope:', r.scope))
-      .catch(e => console.warn('SW registration failed:', e));
+      .then(r => console.log('SW registrado:', r.scope))
+      .catch(e => console.warn('SW error:', e));
   });
 
-  // Auto-recarga cuando el SW activa una nueva versión
+  // SW_UPDATED: mostrar notificación suave en lugar de recargar
+  // (recargar forzado deslogueaba al usuario)
   navigator.serviceWorker.addEventListener('message', event => {
     if (event.data?.type === 'SW_UPDATED') {
-      console.log('🔄 Nueva versión disponible — recargando...');
-      window.location.reload();
+      toast('✅ App actualizada');
     }
   });
 }
