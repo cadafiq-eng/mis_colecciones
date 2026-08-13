@@ -27,7 +27,7 @@
     html,body{height:100%;overflow:hidden}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);max-width:640px;margin:0 auto}
 
-    /* â”€â”€ LOGIN â”€â”€ */
+    /* ── LOGIN ── */
     #loginPage{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:20px;z-index:500}
     #loginPage.hidden{display:none}
     .login-logo{display:flex;align-items:center;gap:14px;margin-bottom:8px}
@@ -41,13 +41,13 @@
     .login-err{font-size:12px;color:var(--accent);text-align:center;min-height:16px}
     .login-note{font-size:11px;color:var(--text2);text-align:center;line-height:1.5}
 
-    /* â”€â”€ HEADER â”€â”€ */
+    /* ── HEADER ── */
     .app-header{background:linear-gradient(135deg,var(--surface2),var(--accent2));padding:12px 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
     .app-header h1{font-size:16px;font-weight:700;flex:1}
     .hbtn{background:rgba(255,255,255,.18);border:none;border-radius:8px;color:#fff;cursor:pointer;padding:5px 10px;font-size:12px;font-weight:600;transition:background .2s;white-space:nowrap}
     .hbtn:active{background:rgba(255,255,255,.32)}
 
-    /* â”€â”€ SYNC BAR â”€â”€ */
+    /* ── SYNC BAR ── */
     #syncBar{background:var(--surface);border-bottom:1px solid var(--border);padding:5px 14px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2);flex-shrink:0}
     #syncDot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;transition:background .3s}
     #syncDot.syncing{background:var(--warning);animation:blink .8s infinite}
@@ -56,13 +56,13 @@
     #syncLabel{flex:1}
     #userEmail{font-size:10px;color:var(--accent2);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
 
-    /* â”€â”€ PAGES â”€â”€ */
+    /* ── PAGES ── */
     #pages{flex:1;overflow:hidden;position:relative}
     .page{position:absolute;inset:0;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1),opacity .28s;overflow:hidden;background:var(--bg)}
     .page.hidden{transform:translateX(100%);opacity:0;pointer-events:none}
     .page.slide-left{transform:translateX(-30%);opacity:0;pointer-events:none}
 
-    /* â”€â”€ COLLECTIONS â”€â”€ */
+    /* ── COLLECTIONS ── */
     .search-bar{padding:10px 14px;flex-shrink:0}
     .search-bar input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:9px 14px;font-size:14px;outline:none;transition:border-color .2s}
     .search-bar input:focus{border-color:var(--accent2)}
@@ -77,7 +77,7 @@
     .fab{position:absolute;right:18px;bottom:18px;width:56px;height:56px;border-radius:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:28px;cursor:pointer;box-shadow:0 4px 20px rgba(233,69,96,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s;z-index:10}
     .fab:active{transform:scale(.92)}
 
-    /* â”€â”€ ITEMS â”€â”€ */
+    /* ── ITEMS ── */
     .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
     .back-btn{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px 6px;border-radius:8px;font-size:24px;line-height:1;display:flex;align-items:center}
     .back-btn:active{background:var(--border)}
@@ -100,7 +100,7 @@
     .item-note{font-size:11px;color:var(--text2);margin-top:4px;font-style:italic}
     .item-actions{display:flex;flex-direction:column;gap:4px}
 
-    /* â”€â”€ ADD FORM â”€â”€ */
+    /* ── ADD FORM ── */
     .add-form{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:14px;padding-bottom:30px}
     .form-group{display:flex;flex-direction:column;gap:6px}
     .form-label{font-size:11px;color:var(--text2);font-weight:700;letter-spacing:.5px}
@@ -117,7 +117,7 @@
     .section-divider{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:11px;font-weight:700;letter-spacing:.5px}
     .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
-    /* â”€â”€ SHARE BANNER â”€â”€ */
+    /* ── SHARE BANNER ── */
     #shareBanner{display:none;flex-shrink:0;background:linear-gradient(135deg,rgba(78,204,163,.2),rgba(83,52,131,.3));border-bottom:2px solid var(--success);padding:12px 16px}
     #shareBanner.visible{display:block}
     .share-banner-title{font-size:11px;font-weight:700;color:var(--success);letter-spacing:.4px;margin-bottom:5px}
@@ -127,7 +127,7 @@
     .share-save-btn{background:var(--success);color:#000;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
     .share-dismiss{background:none;border:none;color:var(--text2);cursor:pointer;padding:4px 8px;font-size:12px}
 
-    /* â”€â”€ MODAL â”€â”€ */
+    /* ── MODAL ── */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;align-items:flex-end;justify-content:center;padding-bottom:var(--safe-bottom)}
     .modal-overlay.open{display:flex}
     .modal{background:var(--surface);border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:640px;display:flex;flex-direction:column;gap:14px;animation:slideUp .25s ease;max-height:85vh;overflow-y:auto}
@@ -138,17 +138,17 @@
     .emoji-opt{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:var(--bg);border:2px solid var(--border);transition:all .15s}
     .emoji-opt.selected{border-color:var(--accent);background:rgba(233,69,96,.12)}
 
-    /* â”€â”€ EMPTY â”€â”€ */
+    /* ── EMPTY ── */
     .empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text2);padding:32px;text-align:center}
     .empty-state .e-icon{font-size:48px;opacity:.5}
     .empty-state p{font-size:14px;line-height:1.6}
 
-    /* â”€â”€ LOADING â”€â”€ */
+    /* ── LOADING ── */
     .loading{display:flex;align-items:center;justify-content:center;flex:1;gap:10px;color:var(--text2);font-size:14px}
     .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--success);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* â”€â”€ TOAST â”€â”€ */
+    /* ── TOAST ── */
     #toast{position:fixed;bottom:calc(var(--safe-bottom) + 18px);left:50%;transform:translateX(-50%);background:var(--success);color:#000;padding:9px 20px;border-radius:24px;font-size:13px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3)}
     #toast.show{opacity:1}
 
@@ -158,7 +158,7 @@
 </head>
 <body>
 
-<!-- â•â• LOGIN PAGE â•â• -->
+<!-- ══ LOGIN PAGE ══ -->
 <div id="loginPage">
   <div class="login-logo">
     <svg width="36" height="36" fill="none" viewBox="0 0 24 24">
@@ -170,16 +170,16 @@
     <h1>MisColecciones</h1>
   </div>
   <div class="login-box">
-    <h2>Iniciar sesiÃ³n</h2>
-    <input class="login-input" type="email" id="loginEmail" placeholder="Correo electrÃ³nico" autocomplete="email"/>
-    <input class="login-input" type="password" id="loginPassword" placeholder="ContraseÃ±a" autocomplete="current-password"/>
+    <h2>Iniciar sesión</h2>
+    <input class="login-input" type="email" id="loginEmail" placeholder="Correo electrónico" autocomplete="email"/>
+    <input class="login-input" type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password"/>
     <div class="login-err" id="loginErr"></div>
     <button class="login-btn" id="loginBtn">Entrar</button>
-    <p class="login-note">Tus colecciones se sincronizan automÃ¡ticamente<br>entre todos tus dispositivos.</p>
+    <p class="login-note">Tus colecciones se sincronizan automáticamente<br>entre todos tus dispositivos.</p>
   </div>
 </div>
 
-<!-- â•â• APP â•â• -->
+<!-- ══ APP ══ -->
 <div class="app-header">
   <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
     <rect x="2" y="3" width="9" height="9" rx="2" fill="#e94560"/>
@@ -189,26 +189,26 @@
   </svg>
   <h1>MisColecciones</h1>
   <div style="display:flex;gap:6px;align-items:center">
-    <button class="hbtn" id="exportBtn" title="Exportar JSON">â¬‡</button>
-    <button class="hbtn" id="logoutBtn" title="Cerrar sesiÃ³n">â»</button>
+    <button class="hbtn" id="exportBtn" title="Exportar JSON">⬇</button>
+    <button class="hbtn" id="logoutBtn" title="Cerrar sesión">⏻</button>
   </div>
 </div>
 
 <!-- SYNC BAR -->
 <div id="syncBar">
   <div id="syncDot" class="syncing"></div>
-  <span id="syncLabel">Conectandoâ€¦</span>
+  <span id="syncLabel">Conectando…</span>
   <span id="userEmail"></span>
 </div>
 
 <!-- SHARE BANNER -->
 <div id="shareBanner">
-  <div class="share-banner-title">ðŸ“¥ PÃGINA RECIBIDA â€” ELIGE DÃ“NDE GUARDAR</div>
+  <div class="share-banner-title">📥 PÁGINA RECIBIDA — ELIGE DÓNDE GUARDAR</div>
   <div class="share-banner-url" id="shareBannerUrl"></div>
   <div class="share-col-row">
     <select class="share-col-select" id="shareColSelect"></select>
-    <button class="share-save-btn" id="shareSaveBtn">ðŸ’¾ Guardar</button>
-    <button class="share-dismiss" id="shareDismiss">âœ•</button>
+    <button class="share-save-btn" id="shareSaveBtn">💾 Guardar</button>
+    <button class="share-dismiss" id="shareDismiss">✕</button>
   </div>
 </div>
 
@@ -218,97 +218,97 @@
   <!-- COLLECTIONS -->
   <div class="page" id="colPage">
     <div class="search-bar">
-      <input type="search" id="searchInput" placeholder="ðŸ” Buscar coleccionesâ€¦"/>
+      <input type="search" id="searchInput" placeholder="🔍 Buscar colecciones…"/>
     </div>
     <div class="col-list" id="colList">
-      <div class="loading"><div class="spinner"></div> Cargando coleccionesâ€¦</div>
+      <div class="loading"><div class="spinner"></div> Cargando colecciones…</div>
     </div>
-    <button class="fab" id="newColFab">ï¼‹</button>
+    <button class="fab" id="newColFab">＋</button>
   </div>
 
   <!-- ITEMS -->
   <div class="page hidden" id="itemPage">
     <div class="page-header">
-      <button class="back-btn" id="backToCollections">â€¹</button>
-      <h2 id="itemPageTitle">ColecciÃ³n</h2>
-      <button class="icon-btn" id="renameColBtn">âœï¸</button>
-      <button class="icon-btn" id="deleteColBtn" style="color:#e94560">ðŸ—‘ï¸</button>
+      <button class="back-btn" id="backToCollections">‹</button>
+      <h2 id="itemPageTitle">Colección</h2>
+      <button class="icon-btn" id="renameColBtn">✏️</button>
+      <button class="icon-btn" id="deleteColBtn" style="color:#e94560">🗑️</button>
     </div>
-    <div class="add-page-bar" id="addCurrentBar">âž• Agregar URL / texto</div>
+    <div class="add-page-bar" id="addCurrentBar">➕ Agregar URL / texto</div>
     <div class="items-list" id="itemsList"></div>
   </div>
 
   <!-- ADD -->
   <div class="page hidden" id="addPage">
     <div class="page-header">
-      <button class="back-btn" id="backToItems">â€¹</button>
+      <button class="back-btn" id="backToItems">‹</button>
       <h2>Agregar elemento</h2>
     </div>
     <div class="add-form">
       <div class="form-group">
-        <label class="form-label">COLECCIÃ“N</label>
+        <label class="form-label">COLECCIÓN</label>
         <select class="form-input form-select" id="addTargetCol"></select>
       </div>
       <div class="section-divider">ENLACE / URL</div>
       <div class="form-group">
-        <label class="form-label">DIRECCIÃ“N WEB</label>
-        <input class="form-input" type="url" id="addUrl" placeholder="https://â€¦"/>
+        <label class="form-label">DIRECCIÓN WEB</label>
+        <input class="form-input" type="url" id="addUrl" placeholder="https://…"/>
       </div>
       <div class="form-group">
-        <label class="form-label">TÃTULO</label>
+        <label class="form-label">TÍTULO</label>
         <input class="form-input" type="text" id="addTitle" placeholder="Nombre del enlace"/>
       </div>
       <div class="form-group">
         <label class="form-label">NOTA (opcional)</label>
-        <textarea class="form-input" id="addNote" placeholder="Â¿Por quÃ© guardas este enlace?"></textarea>
+        <textarea class="form-input" id="addNote" placeholder="¿Por qué guardas este enlace?"></textarea>
       </div>
       <div class="btn-row">
         <button class="btn-ghost" id="cancelAdd">Cancelar</button>
-        <button class="btn-primary" id="confirmAdd">ðŸ’¾ Guardar enlace</button>
+        <button class="btn-primary" id="confirmAdd">💾 Guardar enlace</button>
       </div>
       <div class="section-divider">TEXTO / NOTA LIBRE</div>
       <div class="form-group">
         <label class="form-label">TEXTO</label>
-        <textarea class="form-input" id="addText" placeholder="Escribe o pega el texto que quieres guardarâ€¦" style="min-height:100px"></textarea>
+        <textarea class="form-input" id="addText" placeholder="Escribe o pega el texto que quieres guardar…" style="min-height:100px"></textarea>
       </div>
-      <button class="btn-primary" id="confirmAddText">ðŸ’¾ Guardar texto</button>
+      <button class="btn-primary" id="confirmAddText">💾 Guardar texto</button>
     </div>
   </div>
 
 </div>
 
-<!-- MODAL: Nueva colecciÃ³n -->
+<!-- MODAL: Nueva colección -->
 <div class="modal-overlay" id="newColModal">
   <div class="modal">
     <div class="modal-handle"></div>
-    <h3>Nueva colecciÃ³n</h3>
+    <h3>Nueva colección</h3>
     <div class="form-group">
       <label class="form-label">NOMBRE</label>
-      <input class="form-input" type="text" id="newColName" placeholder="Ej: InvestigaciÃ³n, Recetasâ€¦" maxlength="40"/>
+      <input class="form-input" type="text" id="newColName" placeholder="Ej: Investigación, Recetas…" maxlength="40"/>
     </div>
     <div class="form-group">
-      <label class="form-label">ÃCONO</label>
+      <label class="form-label">ÍCONO</label>
       <div class="emoji-grid" id="emojiGrid">
-        <span class="emoji-opt selected" data-e="ðŸ“">ðŸ“</span>
-        <span class="emoji-opt" data-e="â­">â­</span>
-        <span class="emoji-opt" data-e="ðŸ”¬">ðŸ”¬</span>
-        <span class="emoji-opt" data-e="ðŸ“š">ðŸ“š</span>
-        <span class="emoji-opt" data-e="ðŸ½ï¸">ðŸ½ï¸</span>
-        <span class="emoji-opt" data-e="ðŸ’¡">ðŸ’¡</span>
-        <span class="emoji-opt" data-e="ðŸŽ¯">ðŸŽ¯</span>
-        <span class="emoji-opt" data-e="ðŸ›’">ðŸ›’</span>
-        <span class="emoji-opt" data-e="ðŸ§ª">ðŸ§ª</span>
-        <span class="emoji-opt" data-e="âœˆï¸">âœˆï¸</span>
-        <span class="emoji-opt" data-e="ðŸ’¼">ðŸ’¼</span>
-        <span class="emoji-opt" data-e="ðŸŽ¨">ðŸŽ¨</span>
-        <span class="emoji-opt" data-e="ðŸ ">ðŸ </span>
-        <span class="emoji-opt" data-e="ðŸ“">ðŸ“</span>
-        <span class="emoji-opt" data-e="ðŸ¤–">ðŸ¤–</span>
-        <span class="emoji-opt" data-e="ðŸŒ±">ðŸŒ±</span>
-        <span class="emoji-opt" data-e="ðŸ‹ï¸">ðŸ‹ï¸</span>
-        <span class="emoji-opt" data-e="ðŸŽµ">ðŸŽµ</span>
-        <span class="emoji-opt" data-e="ðŸ“Š">ðŸ“Š</span>
-        <span class="emoji-opt" data-e="ðŸ”—">ðŸ”—</span>
+        <span class="emoji-opt selected" data-e="📁">📁</span>
+        <span class="emoji-opt" data-e="⭐">⭐</span>
+        <span class="emoji-opt" data-e="🔬">🔬</span>
+        <span class="emoji-opt" data-e="📚">📚</span>
+        <span class="emoji-opt" data-e="🍽️">🍽️</span>
+        <span class="emoji-opt" data-e="💡">💡</span>
+        <span class="emoji-opt" data-e="🎯">🎯</span>
+        <span class="emoji-opt" data-e="🛒">🛒</span>
+        <span class="emoji-opt" data-e="🧪">🧪</span>
+        <span class="emoji-opt" data-e="✈️">✈️</span>
+        <span class="emoji-opt" data-e="💼">💼</span>
+        <span class="emoji-opt" data-e="🎨">🎨</span>
+        <span class="emoji-opt" data-e="🏠">🏠</span>
+        <span class="emoji-opt" data-e="📝">📝</span>
+        <span class="emoji-opt" data-e="🤖">🤖</span>
+        <span class="emoji-opt" data-e="🌱">🌱</span>
+        <span class="emoji-opt" data-e="🏋️">🏋️</span>
+        <span class="emoji-opt" data-e="🎵">🎵</span>
+        <span class="emoji-opt" data-e="📊">📊</span>
+        <span class="emoji-opt" data-e="🔗">🔗</span>
       </div>
     </div>
     <div class="btn-row">
@@ -321,31 +321,31 @@
 <div id="toast"></div>
 
 <script>
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// CONFIGURACIÃ“N SUPABASE
-// âš ï¸ Reemplaza TU_ANON_KEY_AQUI con tu anon public key
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
+// CONFIGURACIÓN SUPABASE
+// ⚠️ Reemplaza TU_ANON_KEY_AQUI con tu anon public key
+// ═══════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://gqcfqzwyqgvpvxzvowcl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxY2Zxend5cWd2cHZ4enZvd2NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjY1MTgsImV4cCI6MjA5ODM0MjUxOH0.QRM2bAjhPxW9ougxO0tFc04MaOu217mnl7_M4o6mbp8';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // STATE
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 let app = {
   collections: [],
   currentColId: null,
-  selectedEmoji: 'ðŸ“',
+  selectedEmoji: '📁',
   userId: null,
   realtimeChannel: null,
   pendingShare: null,
   deferredInstall: null
 };
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // HELPERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function esc(s) {
   if (!s) return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -366,9 +366,9 @@ function setSyncStatus(status, label) {
   document.getElementById('syncLabel').textContent = label;
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // AUTH
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 async function checkSession() {
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
@@ -394,29 +394,29 @@ async function doLogin() {
   const password = document.getElementById('loginPassword').value;
   const errEl    = document.getElementById('loginErr');
   errEl.textContent = '';
-  if (!email || !password) { errEl.textContent = 'Ingresa correo y contraseÃ±a'; return; }
-  document.getElementById('loginBtn').textContent = 'Entrandoâ€¦';
+  if (!email || !password) { errEl.textContent = 'Ingresa correo y contraseña'; return; }
+  document.getElementById('loginBtn').textContent = 'Entrando…';
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
   document.getElementById('loginBtn').textContent = 'Entrar';
-  if (error) { errEl.textContent = 'Correo o contraseÃ±a incorrectos'; return; }
+  if (error) { errEl.textContent = 'Correo o contraseña incorrectos'; return; }
   app.userId = data.user.id;
   document.getElementById('userEmail').textContent = data.user.email;
   showApp();
 }
 
 async function doLogout() {
-  if (!confirm('Â¿Cerrar sesiÃ³n?')) return;
+  if (!confirm('¿Cerrar sesión?')) return;
   if (app.realtimeChannel) sb.removeChannel(app.realtimeChannel);
   await sb.auth.signOut();
   app.collections = []; app.userId = null;
   showLogin();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // SUPABASE CRUD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 async function loadCollections() {
-  setSyncStatus('syncing', 'Cargandoâ€¦');
+  setSyncStatus('syncing', 'Cargando…');
   const { data, error } = await sb
     .from('collections')
     .select('*')
@@ -424,42 +424,42 @@ async function loadCollections() {
     .order('created_at', { ascending: true });
   if (error) { setSyncStatus('error', 'Error al cargar'); console.error(error); return; }
   app.collections = data || [];
-  setSyncStatus('', 'â˜ï¸ Sincronizado');
+  setSyncStatus('', '☁️ Sincronizado');
   renderCollections();
   // Update share select if banner open
   if (document.getElementById('shareBanner').classList.contains('visible')) populateShareSelect();
 }
 
 async function createCollection(name, emoji) {
-  setSyncStatus('syncing', 'Guardandoâ€¦');
+  setSyncStatus('syncing', 'Guardando…');
   const { data, error } = await sb.from('collections').insert({
     user_id: app.userId, name, emoji, items: [], description: ''
   }).select().single();
-  if (error) { setSyncStatus('error', 'Error'); toast('âŒ Error al crear', '#e94560'); return; }
-  setSyncStatus('', 'â˜ï¸ Sincronizado');
+  if (error) { setSyncStatus('error', 'Error'); toast('❌ Error al crear', '#e94560'); return; }
+  setSyncStatus('', '☁️ Sincronizado');
 }
 
 async function updateCollection(id, changes) {
-  setSyncStatus('syncing', 'Guardandoâ€¦');
+  setSyncStatus('syncing', 'Guardando…');
   const { error } = await sb.from('collections')
     .update({ ...changes, updated_at: new Date().toISOString() })
     .eq('id', id).eq('user_id', app.userId);
   if (error) { setSyncStatus('error', 'Error al guardar'); console.error(error); return false; }
-  setSyncStatus('', 'â˜ï¸ Sincronizado');
+  setSyncStatus('', '☁️ Sincronizado');
   return true;
 }
 
 async function deleteCollection(id) {
-  setSyncStatus('syncing', 'Eliminandoâ€¦');
+  setSyncStatus('syncing', 'Eliminando…');
   const { error } = await sb.from('collections')
     .delete().eq('id', id).eq('user_id', app.userId);
   if (error) { setSyncStatus('error', 'Error'); return; }
-  setSyncStatus('', 'â˜ï¸ Sincronizado');
+  setSyncStatus('', '☁️ Sincronizado');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// REALTIME â€” sync automÃ¡tico entre dispositivos
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
+// REALTIME — sync automático entre dispositivos
+// ═══════════════════════════════════════════════════════
 function subscribeRealtime() {
   if (app.realtimeChannel) sb.removeChannel(app.realtimeChannel);
   app.realtimeChannel = sb
@@ -471,8 +471,8 @@ function subscribeRealtime() {
       }
     )
     .subscribe((status) => {
-      if (status === 'SUBSCRIBED') setSyncStatus('', 'â˜ï¸ Sincronizado en tiempo real');
-      if (status === 'CLOSED') setSyncStatus('error', 'âš ï¸ Sin conexiÃ³n en tiempo real');
+      if (status === 'SUBSCRIBED') setSyncStatus('', '☁️ Sincronizado en tiempo real');
+      if (status === 'CLOSED') setSyncStatus('error', '⚠️ Sin conexión en tiempo real');
     });
 }
 
@@ -481,7 +481,7 @@ function handleRealtimeEvent(payload) {
   if (eventType === 'INSERT') {
     if (!app.collections.find(c => c.id === newRow.id)) {
       app.collections.push(newRow);
-      toast('â˜ï¸ Nueva colecciÃ³n sincronizada');
+      toast('☁️ Nueva colección sincronizada');
     }
   } else if (eventType === 'UPDATE') {
     const idx = app.collections.findIndex(c => c.id === newRow.id);
@@ -490,21 +490,21 @@ function handleRealtimeEvent(payload) {
     if (app.currentColId === newRow.id) {
       renderItems(newRow);
     }
-    setSyncStatus('', 'â˜ï¸ Sincronizado');
+    setSyncStatus('', '☁️ Sincronizado');
   } else if (eventType === 'DELETE') {
     app.collections = app.collections.filter(c => c.id !== oldRow.id);
     if (app.currentColId === oldRow.id) {
       showPage('colPage', 'back');
-      toast('ColecciÃ³n eliminada desde otro dispositivo', '#f7b731');
+      toast('Colección eliminada desde otro dispositivo', '#f7b731');
     }
   }
   renderCollections(document.getElementById('searchInput').value);
   if (document.getElementById('shareBanner').classList.contains('visible')) populateShareSelect();
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // NAVIGATION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function showPage(id, dir='forward') {
   document.querySelectorAll('.page').forEach(p => {
     const isTarget = p.id === id;
@@ -514,9 +514,9 @@ function showPage(id, dir='forward') {
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // RENDER COLLECTIONS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function renderCollections(filter='') {
   const list = document.getElementById('colList');
   list.innerHTML = '';
@@ -526,38 +526,38 @@ function renderCollections(filter='') {
     : app.collections;
 
   if (!cols.length && !q) {
-    list.innerHTML = `<div class="empty-state"><div class="e-icon">ðŸ“</div><p>No tienes colecciones todavÃ­a.<br>Toca <strong>ï¼‹</strong> para crear una.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="e-icon">📁</div><p>No tienes colecciones todavía.<br>Toca <strong>＋</strong> para crear una.</p></div>`;
     return;
   }
   if (!cols.length) {
-    list.innerHTML = `<div class="empty-state"><div class="e-icon">ðŸ”</div><p>Sin resultados para "${esc(q)}"</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="e-icon">🔍</div><p>Sin resultados para "${esc(q)}"</p></div>`;
     return;
   }
   cols.forEach(col => {
     const items = Array.isArray(col.items) ? col.items : [];
-    const recent = items.length ? ` Â· ${new Date(col.updated_at).toLocaleDateString('es-MX')}` : '';
+    const recent = items.length ? ` · ${new Date(col.updated_at).toLocaleDateString('es-MX')}` : '';
     const card = document.createElement('div');
     card.className = 'col-card';
     card.innerHTML = `
-      <div class="col-emoji">${col.emoji||'ðŸ“'}</div>
+      <div class="col-emoji">${col.emoji||'📁'}</div>
       <div class="col-info">
         <div class="col-name">${esc(col.name)}</div>
         <div class="col-count">${items.length} elemento${items.length!==1?'s':''}${recent}</div>
       </div>
-      <div class="col-chevron">â€º</div>`;
+      <div class="col-chevron">›</div>`;
     card.onclick = () => openCol(col.id);
     list.appendChild(card);
   });
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // ITEMS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function openCol(id) {
   app.currentColId = id;
   const col = getCol(id);
   if (!col) return;
-  document.getElementById('itemPageTitle').textContent = (col.emoji||'ðŸ“') + ' ' + col.name;
+  document.getElementById('itemPageTitle').textContent = (col.emoji||'📁') + ' ' + col.name;
   renderItems(col);
   showPage('itemPage');
 }
@@ -567,32 +567,32 @@ function renderItems(col) {
   list.innerHTML = '';
   const items = Array.isArray(col.items) ? col.items : [];
   if (!items.length) {
-    list.innerHTML = `<div class="empty-state"><div class="e-icon">ðŸ“­</div><p>ColecciÃ³n vacÃ­a.<br>Toca el botÃ³n de arriba para agregar.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><div class="e-icon">📭</div><p>Colección vacía.<br>Toca el botón de arriba para agregar.</p></div>`;
     return;
   }
   items.slice().reverse().forEach((item, ri) => {
     const idx = items.length - 1 - ri;
-    let thumb = {page:'ðŸŒ',link:'ðŸ”—',text:'ðŸ“',image:'ðŸ–¼ï¸'}[item.type]||'ðŸ“Œ';
+    let thumb = {page:'🌐',link:'🔗',text:'📝',image:'🖼️'}[item.type]||'📌';
     if (item.type==='page' && item.favicon) thumb=`<img src="${esc(item.favicon)}" onerror="this.style.display='none'"/>`;
     const urlDisplay = item.url || item.pageUrl || '';
-    const titleDisplay = item.title || (item.type==='text'?(item.content||'').substring(0,60)+'â€¦':'');
+    const titleDisplay = item.title || (item.type==='text'?(item.content||'').substring(0,60)+'…':'');
     const dateStr = item.date ? new Date(item.date).toLocaleDateString('es-MX') : '';
-    const typeLabel = {page:'PÃ¡gina',link:'Enlace',text:'Texto',image:'Imagen'}[item.type]||'Item';
+    const typeLabel = {page:'Página',link:'Enlace',text:'Texto',image:'Imagen'}[item.type]||'Item';
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
       <div class="item-thumb">${thumb}</div>
       <div class="item-body">
-        <div class="item-title">${esc(titleDisplay||'Sin tÃ­tulo')}</div>
+        <div class="item-title">${esc(titleDisplay||'Sin título')}</div>
         ${urlDisplay?`<div class="item-url">${esc(urlDisplay)}</div>`:''}
         <span class="item-type-badge badge-${item.type||'link'}">${typeLabel}</span>
         ${item.note?`<div class="item-note">"${esc(item.note)}"</div>`:''}
-        ${item.type==='text'?`<div class="item-note" style="color:var(--text);margin-top:6px">${esc((item.content||'').substring(0,160))}${(item.content||'').length>160?'â€¦':''}</div>`:''}
+        ${item.type==='text'?`<div class="item-note" style="color:var(--text);margin-top:6px">${esc((item.content||'').substring(0,160))}${(item.content||'').length>160?'…':''}</div>`:''}
         ${dateStr?`<div class="item-url" style="margin-top:3px">${dateStr}</div>`:''}
       </div>
       <div class="item-actions">
-        ${urlDisplay?`<button class="icon-btn" onclick="openUrl('${esc(urlDisplay)}')" title="Abrir">â†—ï¸</button>`:''}
-        <button class="icon-btn" onclick="deleteItem(${idx})" style="color:#e94560" title="Eliminar">ðŸ—‘ï¸</button>
+        ${urlDisplay?`<button class="icon-btn" onclick="openUrl('${esc(urlDisplay)}')" title="Abrir">↗️</button>`:''}
+        <button class="icon-btn" onclick="deleteItem(${idx})" style="color:#e94560" title="Eliminar">🗑️</button>
       </div>`;
     list.appendChild(card);
   });
@@ -601,7 +601,7 @@ function renderItems(col) {
 function openUrl(url) { window.open(url,'_blank','noopener'); }
 
 async function deleteItem(idx) {
-  if (!confirm('Â¿Eliminar este elemento?')) return;
+  if (!confirm('¿Eliminar este elemento?')) return;
   const col = getCol(app.currentColId);
   const items = [...(col.items||[])];
   items.splice(idx,1);
@@ -609,12 +609,12 @@ async function deleteItem(idx) {
   if (ok) { col.items = items; renderItems(col); toast('Eliminado','#f7b731'); }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // ADD ITEM
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function openAddPage() {
   const sel = document.getElementById('addTargetCol');
-  sel.innerHTML = app.collections.map(c=>`<option value="${c.id}">${c.emoji||'ðŸ“'} ${esc(c.name)}</option>`).join('');
+  sel.innerHTML = app.collections.map(c=>`<option value="${c.id}">${c.emoji||'📁'} ${esc(c.name)}</option>`).join('');
   if (app.currentColId) sel.value = app.currentColId;
   ['addUrl','addTitle','addNote','addText'].forEach(id => document.getElementById(id).value='');
   showPage('addPage');
@@ -626,15 +626,15 @@ async function saveLink() {
   const note  = document.getElementById('addNote').value.trim();
   const colId = document.getElementById('addTargetCol').value;
   if (!url)   { toast('Ingresa una URL','#e94560'); return; }
-  if (!colId) { toast('Selecciona una colecciÃ³n','#e94560'); return; }
+  if (!colId) { toast('Selecciona una colección','#e94560'); return; }
   const col = getCol(colId);
   const items = [...(col.items||[]), { id:genId(), type:'link', title:title||url, url, note, date:new Date().toISOString() }];
   const ok = await updateCollection(colId, { items });
   if (ok) {
     col.items = items; app.currentColId = colId;
     renderItems(col);
-    document.getElementById('itemPageTitle').textContent=(col.emoji||'ðŸ“')+' '+col.name;
-    toast('âœ… Guardado en '+col.name);
+    document.getElementById('itemPageTitle').textContent=(col.emoji||'📁')+' '+col.name;
+    toast('✅ Guardado en '+col.name);
     showPage('itemPage','back');
   }
 }
@@ -643,34 +643,34 @@ async function saveText() {
   const text  = document.getElementById('addText').value.trim();
   const colId = document.getElementById('addTargetCol').value;
   if (!text)  { toast('Escribe algo','#e94560'); return; }
-  if (!colId) { toast('Selecciona una colecciÃ³n','#e94560'); return; }
+  if (!colId) { toast('Selecciona una colección','#e94560'); return; }
   const col = getCol(colId);
-  const items = [...(col.items||[]), { id:genId(), type:'text', title:text.substring(0,60)+(text.length>60?'â€¦':''), content:text, note:'', date:new Date().toISOString() }];
+  const items = [...(col.items||[]), { id:genId(), type:'text', title:text.substring(0,60)+(text.length>60?'…':''), content:text, note:'', date:new Date().toISOString() }];
   const ok = await updateCollection(colId, { items });
   if (ok) {
     col.items = items; app.currentColId = colId;
     renderItems(col);
-    document.getElementById('itemPageTitle').textContent=(col.emoji||'ðŸ“')+' '+col.name;
-    toast('âœ… Texto guardado');
+    document.getElementById('itemPageTitle').textContent=(col.emoji||'📁')+' '+col.name;
+    toast('✅ Texto guardado');
     showPage('itemPage','back');
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // SHARE BANNER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function populateShareSelect() {
   const sel = document.getElementById('shareColSelect');
   sel.innerHTML = !app.collections.length
-    ? '<option value="">â€” Crea primero una colecciÃ³n â€”</option>'
-    : app.collections.map(c=>`<option value="${c.id}">${c.emoji||'ðŸ“'} ${esc(c.name)}</option>`).join('');
+    ? '<option value="">— Crea primero una colección —</option>'
+    : app.collections.map(c=>`<option value="${c.id}">${c.emoji||'📁'} ${esc(c.name)}</option>`).join('');
 }
 
 function showShareBanner(shareData) {
   app.pendingShare = shareData;
   const urlText = shareData.url || shareData.text || '';
   const titleText = shareData.title || urlText;
-  document.getElementById('shareBannerUrl').textContent = titleText.substring(0,80)+(titleText.length>80?'â€¦':'');
+  document.getElementById('shareBannerUrl').textContent = titleText.substring(0,80)+(titleText.length>80?'…':'');
   populateShareSelect();
   document.getElementById('shareBanner').classList.add('visible');
   window.history.replaceState({},'','./index.html');
@@ -678,43 +678,43 @@ function showShareBanner(shareData) {
 
 async function saveSharedItem() {
   const colId = document.getElementById('shareColSelect').value;
-  if (!colId) { toast('Crea una colecciÃ³n primero','#e94560'); return; }
+  if (!colId) { toast('Crea una colección primero','#e94560'); return; }
   const col = getCol(colId);
   const sd  = app.pendingShare;
   const url = sd.url||'';
   const items = [...(col.items||[]), {
     id:genId(), type:url?'link':'text',
-    title:sd.title||url||'Sin tÃ­tulo', url, content:sd.text||'',
+    title:sd.title||url||'Sin título', url, content:sd.text||'',
     favicon:'', note:'', date:new Date().toISOString()
   }];
   const ok = await updateCollection(colId, { items });
   if (ok) {
     col.items = items;
-    toast(`âœ… Guardado en ${col.emoji||'ðŸ“'} ${col.name}`);
+    toast(`✅ Guardado en ${col.emoji||'📁'} ${col.name}`);
     document.getElementById('shareBanner').classList.remove('visible');
     app.pendingShare = null;
   }
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // EXPORT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function doExport() {
   const blob = new Blob([JSON.stringify({version:2,exportDate:new Date().toISOString(),collections:app.collections},null,2)],{type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `MisColecciones_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
-  toast('âœ… Exportado');
+  toast('✅ Exportado');
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // NEW COLLECTION MODAL
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 function openNewColModal() {
   document.getElementById('newColName').value='';
-  app.selectedEmoji='ðŸ“';
-  document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.toggle('selected',e.dataset.e==='ðŸ“'));
+  app.selectedEmoji='📁';
+  document.querySelectorAll('.emoji-opt').forEach(e=>e.classList.toggle('selected',e.dataset.e==='📁'));
   document.getElementById('newColModal').classList.add('open');
   setTimeout(()=>document.getElementById('newColName').focus(),300);
 }
@@ -725,12 +725,12 @@ async function doCreateCollection() {
   if (!name) { document.getElementById('newColName').focus(); return; }
   await createCollection(name, app.selectedEmoji);
   closeNewColModal();
-  toast('âœ… ColecciÃ³n creada: '+name);
+  toast('✅ Colección creada: '+name);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 // INIT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
 
   // Service worker
@@ -781,14 +781,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const n = prompt('Nuevo nombre:', col.name);
     if (!n?.trim()) return;
     const ok = await updateCollection(col.id, { name:n.trim() });
-    if (ok) { col.name=n.trim(); document.getElementById('itemPageTitle').textContent=(col.emoji||'ðŸ“')+' '+col.name; toast('âœ… Nombre actualizado'); }
+    if (ok) { col.name=n.trim(); document.getElementById('itemPageTitle').textContent=(col.emoji||'📁')+' '+col.name; toast('✅ Nombre actualizado'); }
   };
   document.getElementById('deleteColBtn').onclick = async () => {
-    if (!confirm('Â¿Eliminar esta colecciÃ³n y todos sus elementos?')) return;
+    if (!confirm('¿Eliminar esta colección y todos sus elementos?')) return;
     await deleteCollection(app.currentColId);
     app.collections = app.collections.filter(c=>c.id!==app.currentColId);
     showPage('colPage','back'); renderCollections();
-    toast('ColecciÃ³n eliminada','#e94560');
+    toast('Colección eliminada','#e94560');
   };
 
   // Add form
