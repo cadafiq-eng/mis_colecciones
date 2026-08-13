@@ -35,8 +35,14 @@
     .login-input:focus{border-color:var(--accent2)}
     .login-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;color:#fff;padding:13px;font-size:15px;font-weight:700;cursor:pointer;width:100%}
     .login-btn:active{opacity:.8}
-    .login-err{font-size:12px;color:var(--accent);text-align:center;min-height:16px}
+    .login-btn.ghost{background:var(--surface2);margin-top:-4px;font-size:13px;padding:11px}
+    .login-err{font-size:12px;color:var(--accent);text-align:center;min-height:14px}
+    .login-ok{font-size:12px;color:var(--success);text-align:center;min-height:14px;display:none}
     .login-note{font-size:11px;color:var(--text2);text-align:center;line-height:1.5}
+    .login-links{display:flex;justify-content:center;gap:20px}
+    .login-link{background:none;border:none;color:var(--accent2);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 0}
+    .login-divider{display:flex;align-items:center;gap:8px;color:var(--text2);font-size:11px;margin:2px 0}
+    .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 
     /* HEADER */
     .app-header{background:linear-gradient(135deg,var(--surface2),var(--accent2));padding:12px 14px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -171,12 +177,19 @@
     <h1>MisColecciones</h1>
   </div>
   <div class="login-box">
-    <h2>Iniciar sesion</h2>
+    <h2 id="loginTitle">Iniciar sesion</h2>
     <input class="login-input" type="email" id="loginEmail" placeholder="Correo electronico" autocomplete="email"/>
-    <input class="login-input" type="password" id="loginPassword" placeholder="Contrasena" autocomplete="current-password"/>
+    <input class="login-input" type="password" id="loginPassword" placeholder="Contrase&#xF1;a" autocomplete="current-password"/>
+    <input class="login-input" type="password" id="loginPassword2" placeholder="Repetir contrase&#xF1;a" style="display:none" autocomplete="new-password"/>
     <div class="login-err" id="loginErr"></div>
+    <div class="login-ok" id="loginOk"></div>
     <button class="login-btn" id="loginBtn">Entrar</button>
-    <p class="login-note">Tus colecciones se sincronizan automaticamente entre todos tus dispositivos.</p>
+    <div class="login-divider">o</div>
+    <div class="login-links">
+      <button class="login-link" id="switchRegisterBtn">Crear cuenta nueva</button>
+      <button class="login-link" id="forgotBtn">Olvid&eacute; mi contrase&ntilde;a</button>
+    </div>
+    <p class="login-note" id="loginNote">Tus colecciones se sincronizan automaticamente entre todos tus dispositivos.</p>
   </div>
 </div>
 
@@ -306,7 +319,7 @@
 // Reemplaza TU_ANON_KEY_AQUI con tu anon public key
 // ═══════════════════════════════════════════
 const SUPABASE_URL = 'https://gqcfqzwyqgvpvxzvowcl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxY2Zxend5cWd2cHZ4enZvd2NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjY1MTgsImV4cCI6MjA5ODM0MjUxOH0.QRM2bAjhPxW9ougxO0tFc04MaOu217mnl7_M4o6mbp8';
+const SUPABASE_KEY = 'TU_ANON_KEY_AQUI';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ═══════════════════════════════════════════
@@ -347,28 +360,103 @@ function setSyncStatus(cls, label){
 // ═══════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════
+// ── LOGIN MODE: 'login' | 'register' | 'forgot' ──
+let loginMode = 'login';
+
+function setLoginMode(mode){
+  loginMode = mode;
+  const title   = document.getElementById('loginTitle');
+  const btn     = document.getElementById('loginBtn');
+  const pass2   = document.getElementById('loginPassword2');
+  const note    = document.getElementById('loginNote');
+  const swBtn   = document.getElementById('switchRegisterBtn');
+  const forgBtn = document.getElementById('forgotBtn');
+  const errEl   = document.getElementById('loginErr');
+  const okEl    = document.getElementById('loginOk');
+  errEl.textContent=''; okEl.style.display='none'; okEl.textContent='';
+  if(mode==='login'){
+    title.textContent='Iniciar sesion';
+    btn.textContent='Entrar';
+    pass2.style.display='none';
+    note.textContent='Tus colecciones se sincronizan automaticamente entre todos tus dispositivos.';
+    swBtn.textContent='Crear cuenta nueva';
+    forgBtn.style.display='inline';
+  } else if(mode==='register'){
+    title.textContent='Crear cuenta nueva';
+    btn.textContent='Registrarme';
+    pass2.style.display='block';
+    note.textContent='Cada cuenta tiene sus propias colecciones separadas.';
+    swBtn.textContent='Ya tengo cuenta, entrar';
+    forgBtn.style.display='none';
+  } else if(mode==='forgot'){
+    title.textContent='Recuperar contrase00f1a';
+    btn.textContent='Enviar correo de recuperacion';
+    pass2.style.display='none';
+    note.textContent='Te enviaremos un enlace para restablecer tu contrase00f1a.';
+    swBtn.textContent='Volver al inicio de sesion';
+    forgBtn.style.display='none';
+  }
+}
+
 async function checkSession(){
   const {data:{session}} = await sb.auth.getSession();
   if(session){ app.userId=session.user.id; document.getElementById('userEmail').textContent=session.user.email; showApp(); }
   else showLogin();
 }
-function showLogin(){ document.getElementById('loginPage').classList.remove('hidden'); }
+function showLogin(){ document.getElementById('loginPage').classList.remove('hidden'); setLoginMode('login'); }
 function showApp(){ document.getElementById('loginPage').classList.add('hidden'); loadCollections(); subscribeRealtime(); }
 
-async function doLogin(){
-  const email=document.getElementById('loginEmail').value.trim();
-  const pass=document.getElementById('loginPassword').value;
-  const errEl=document.getElementById('loginErr');
-  errEl.textContent='';
-  if(!email||!pass){errEl.textContent='Ingresa correo y contrasena';return;}
-  document.getElementById('loginBtn').textContent='Entrando...';
-  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
-  document.getElementById('loginBtn').textContent='Entrar';
-  if(error){errEl.textContent='Correo o contrasena incorrectos';return;}
-  app.userId=data.user.id;
-  document.getElementById('userEmail').textContent=data.user.email;
-  showApp();
+async function doLoginAction(){
+  const email  = document.getElementById('loginEmail').value.trim();
+  const pass   = document.getElementById('loginPassword').value;
+  const pass2  = document.getElementById('loginPassword2').value;
+  const errEl  = document.getElementById('loginErr');
+  const okEl   = document.getElementById('loginOk');
+  const btn    = document.getElementById('loginBtn');
+  errEl.textContent=''; okEl.style.display='none';
+
+  if(loginMode==='login'){
+    if(!email||!pass){errEl.textContent='Ingresa correo y contrase00f1a';return;}
+    btn.textContent='Entrando...'; btn.disabled=true;
+    const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+    btn.textContent='Entrar'; btn.disabled=false;
+    if(error){errEl.textContent='Correo o contrase00f1a incorrectos';return;}
+    app.userId=data.user.id;
+    document.getElementById('userEmail').textContent=data.user.email;
+    showApp();
+
+  } else if(loginMode==='register'){
+    if(!email||!pass){errEl.textContent='Ingresa correo y contrase00f1a';return;}
+    if(pass.length<6){errEl.textContent='La contrase00f1a debe tener al menos 6 caracteres';return;}
+    if(pass!==pass2){errEl.textContent='Las contrase00f1as no coinciden';return;}
+    btn.textContent='Registrando...'; btn.disabled=true;
+    const {data,error}=await sb.auth.signUp({email,password:pass});
+    btn.textContent='Registrarme'; btn.disabled=false;
+    if(error){errEl.textContent='Error: '+error.message;return;}
+    // Some Supabase configs require email confirmation
+    if(data.user&&data.session){
+      app.userId=data.user.id;
+      document.getElementById('userEmail').textContent=data.user.email;
+      showApp();
+    } else {
+      okEl.textContent='Revisa tu correo para confirmar tu cuenta, luego inicia sesion.';
+      okEl.style.display='block';
+      setLoginMode('login');
+      document.getElementById('loginEmail').value=email;
+    }
+
+  } else if(loginMode==='forgot'){
+    if(!email){errEl.textContent='Ingresa tu correo electronico';return;}
+    btn.textContent='Enviando...'; btn.disabled=true;
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});
+    btn.textContent='Enviar correo de recuperacion'; btn.disabled=false;
+    if(error){errEl.textContent='Error: '+error.message;return;}
+    okEl.textContent='Correo enviado. Revisa tu bandeja de entrada.';
+    okEl.style.display='block';
+    setTimeout(()=>setLoginMode('login'),3000);
+  }
 }
+
 async function doLogout(){
   if(!confirm('Cerrar sesion?'))return;
   if(app.channel) sb.removeChannel(app.channel);
@@ -639,8 +727,11 @@ document.addEventListener('DOMContentLoaded',async()=>{
   await checkSession();
   if(app.pendingShare&&app.userId) setTimeout(()=>showShareBanner(app.pendingShare),500);
 
-  document.getElementById('loginBtn').onclick=doLogin;
-  document.getElementById('loginPassword').onkeydown=e=>{if(e.key==='Enter')doLogin();};
+  document.getElementById('loginBtn').onclick=doLoginAction;
+  document.getElementById('loginPassword').onkeydown=e=>{if(e.key==='Enter')doLoginAction();};
+  document.getElementById('loginPassword2').onkeydown=e=>{if(e.key==='Enter')doLoginAction();};
+  document.getElementById('switchRegisterBtn').onclick=()=>setLoginMode(loginMode==='login'?'register':'login');
+  document.getElementById('forgotBtn').onclick=()=>setLoginMode('forgot');
   document.getElementById('logoutBtn').onclick=doLogout;
   document.getElementById('exportBtn').onclick=doExport;
   document.getElementById('searchInput').addEventListener('input',e=>renderCollections(e.target.value));
