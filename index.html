@@ -20,6 +20,19 @@
       --safe-top:env(safe-area-inset-top,0px);
       --safe-bottom:env(safe-area-inset-bottom,0px);
     }
+    /* Modo claro */
+    body.light {
+      --bg:#f0f2f5; --surface:#ffffff; --surface2:#e2e8f0;
+      --accent:#e94560; --accent2:#533483;
+      --text:#1a1a2e; --text2:#64748b; --border:#cbd5e1;
+      --success:#059669; --warning:#d97706;
+    }
+    body.light .app-header{background:linear-gradient(135deg,#533483,#e94560)}
+    body.light .fab{box-shadow:0 4px 20px rgba(233,69,96,.3)}
+    body.light #loginPage{background:var(--bg)}
+    body.light .login-box{box-shadow:0 4px 24px rgba(0,0,0,.1)}
+    /* Transicion suave al cambiar modo */
+    body{transition:background .3s,color .3s}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
     html,body{height:100%;overflow:hidden}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bottom);max-width:640px;margin:0 auto}
@@ -203,6 +216,8 @@
   </svg>
   <h1>MisColecciones</h1>
   <div style="display:flex;gap:6px">
+    <button class="hbtn" id="themeBtn" title="Cambiar modo">&#9788;</button>
+    <button class="hbtn" id="importBtn">Importar</button>
     <button class="hbtn" id="exportBtn">Exportar</button>
     <button class="hbtn" id="logoutBtn">Salir</button>
   </div>
@@ -311,6 +326,7 @@
   </div>
 </div>
 
+<input type="file" id="importFile" accept=".json" style="display:none"/>
 <div id="toast"></div>
 
 <script>
@@ -319,7 +335,7 @@
 // Reemplaza TU_ANON_KEY_AQUI con tu anon public key
 // ═══════════════════════════════════════════
 const SUPABASE_URL = 'https://gqcfqzwyqgvpvxzvowcl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxY2Zxend5cWd2cHZ4enZvd2NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjY1MTgsImV4cCI6MjA5ODM0MjUxOH0.QRM2bAjhPxW9ougxO0tFc04MaOu217mnl7_M4o6mbp8';
+const SUPABASE_KEY = 'TU_ANON_KEY_AQUI';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ═══════════════════════════════════════════
@@ -389,10 +405,10 @@ function setLoginMode(mode){
     swBtn.textContent='Ya tengo cuenta, entrar';
     forgBtn.style.display='none';
   } else if(mode==='forgot'){
-    title.textContent='Recuperar contrase00f1a';
+    title.textContent='Recuperar contraseña';
     btn.textContent='Enviar correo de recuperacion';
     pass2.style.display='none';
-    note.textContent='Te enviaremos un enlace para restablecer tu contrase00f1a.';
+    note.textContent='Te enviaremos un enlace para restablecer tu contraseña.';
     swBtn.textContent='Volver al inicio de sesion';
     forgBtn.style.display='none';
   }
@@ -416,19 +432,19 @@ async function doLoginAction(){
   errEl.textContent=''; okEl.style.display='none';
 
   if(loginMode==='login'){
-    if(!email||!pass){errEl.textContent='Ingresa correo y contrase00f1a';return;}
+    if(!email||!pass){errEl.textContent='Ingresa correo y contraseña';return;}
     btn.textContent='Entrando...'; btn.disabled=true;
     const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
     btn.textContent='Entrar'; btn.disabled=false;
-    if(error){errEl.textContent='Correo o contrase00f1a incorrectos';return;}
+    if(error){errEl.textContent='Correo o contraseña incorrectos';return;}
     app.userId=data.user.id;
     document.getElementById('userEmail').textContent=data.user.email;
     showApp();
 
   } else if(loginMode==='register'){
-    if(!email||!pass){errEl.textContent='Ingresa correo y contrase00f1a';return;}
-    if(pass.length<6){errEl.textContent='La contrase00f1a debe tener al menos 6 caracteres';return;}
-    if(pass!==pass2){errEl.textContent='Las contrase00f1as no coinciden';return;}
+    if(!email||!pass){errEl.textContent='Ingresa correo y contraseña';return;}
+    if(pass.length<6){errEl.textContent='La contraseña debe tener al menos 6 caracteres';return;}
+    if(pass!==pass2){errEl.textContent='Las contraseñas no coinciden';return;}
     btn.textContent='Registrando...'; btn.disabled=true;
     const {data,error}=await sb.auth.signUp({email,password:pass});
     btn.textContent='Registrarme'; btn.disabled=false;
@@ -686,6 +702,51 @@ function doExport(){
 }
 
 // ═══════════════════════════════════════════
+// IMPORT
+// ═══════════════════════════════════════════
+async function doImport(file){
+  try {
+    const d=JSON.parse(await file.text());
+    const incoming=Array.isArray(d)?d:(d.collections||[]);
+    if(!incoming.length){toast('El archivo esta vacio o tiene formato incorrecto','#e94560');return;}
+    let added=0, skipped=0;
+    for(const col of incoming){
+      if(!col.name) continue;
+      // Check if collection with same name already exists
+      const exists=app.collections.find(c=>c.name===col.name);
+      if(exists){skipped++;continue;}
+      await sb.from('collections').insert({
+        user_id:app.userId,
+        name:col.name,
+        emoji:col.emoji||'📁',
+        items:col.items||[],
+        description:col.description||''
+      });
+      added++;
+    }
+    await loadCollections();
+    toast('Importado: '+added+' nuevas, '+skipped+' ya existian');
+  } catch(e){ toast('Error al importar: '+e.message,'#e94560'); }
+}
+
+// ═══════════════════════════════════════════
+// THEME (day / night)
+// ═══════════════════════════════════════════
+function initTheme(){
+  const saved=localStorage.getItem('mc_theme')||'dark';
+  applyTheme(saved);
+}
+function applyTheme(mode){
+  document.body.classList.toggle('light', mode==='light');
+  document.getElementById('themeBtn').textContent = mode==='light' ? '\u263D' : '\u2600';
+  localStorage.setItem('mc_theme', mode);
+}
+function toggleTheme(){
+  const isLight=document.body.classList.contains('light');
+  applyTheme(isLight?'dark':'light');
+}
+
+// ═══════════════════════════════════════════
 // NEW COLLECTION MODAL
 // ═══════════════════════════════════════════
 function buildEmojiGrid(){
@@ -734,6 +795,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
   document.getElementById('forgotBtn').onclick=()=>setLoginMode('forgot');
   document.getElementById('logoutBtn').onclick=doLogout;
   document.getElementById('exportBtn').onclick=doExport;
+  document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+  document.getElementById('importFile').onchange=e=>{if(e.target.files[0])doImport(e.target.files[0]);};
+  document.getElementById('themeBtn').onclick=toggleTheme;
+  initTheme();
   document.getElementById('searchInput').addEventListener('input',e=>renderCollections(e.target.value));
   document.getElementById('newColFab').onclick=openNewColModal;
   document.getElementById('addCurrentBar').onclick=openAddPage;
