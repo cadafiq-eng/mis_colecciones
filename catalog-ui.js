@@ -3,7 +3,8 @@ let importBusy=false, favoritesOnly=false;
 function renderCollections(filter=''){
   const list=document.getElementById('colList');list.replaceChildren();
   const q=CatalogTools.norm(filter);let count=0;
-  for(const col of app.collections){
+  const sortedCollections=[...app.collections].sort((a,b)=>String(a.name||'').trim().localeCompare(String(b.name||'').trim(),'es',{sensitivity:'base',numeric:true}));
+  for(const col of sortedCollections){
     const all=Array.isArray(col.items)?col.items:[];
     const items=all.filter(i=>(!favoritesOnly||i.favorite)&&(CatalogTools.norm(col.name).includes(q)||CatalogTools.matches(i,q)));
     if((q||favoritesOnly)&&!items.length&&!(!favoritesOnly&&CatalogTools.norm(col.name).includes(q)))continue;
