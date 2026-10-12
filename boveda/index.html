@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bóveda de Archivos</title>
+<meta name="description" content="Cifra fotos y archivos con contraseña (AES-256) en su propio dispositivo.">
+<meta name="theme-color" content="#1d3557">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bóveda">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una sola columna de trabajo, segmentada en Cifrar / Descifrar, con la ficha técnica al pie. */
+:root {
+  --bg: #f3f4f7;
+  --surface: #ffffff;
+  --ink: #18202e;
+  --muted: #5b6475;
+  --line: #d9dde6;
+  --vault: #1d3557;
+  --brass: #a86f12;
+  --brass-soft: #f6ead3;
+  --ok: #1f7a4d;
+  --ok-soft: #e2f3ea;
+  --bad: #b3261e;
+  --bad-soft: #fbe5e3;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141d; --surface: #171e2a; --ink: #e7eaf0; --muted: #9aa3b4; --line: #2a3344;
+    --vault: #8fb3e3; --brass: #e2ac4f; --brass-soft: #2e2617;
+    --ok: #5cc996; --ok-soft: #16291f; --bad: #ff8a80; --bad-soft: #2f1a19;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141d; --surface: #171e2a; --ink: #e7eaf0; --muted: #9aa3b4; --line: #2a3344;
+  --vault: #8fb3e3; --brass: #e2ac4f; --brass-soft: #2e2617;
+  --ok: #5cc996; --ok-soft: #16291f; --bad: #ff8a80; --bad-soft: #2f1a19;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--bg); }
+[hidden] { display: none !important; }
+body { margin: 0; -webkit-text-size-adjust: 100%; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 640px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; display: grid; gap: 22px; }
+
+header { display: grid; gap: 6px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.dial { width: 44px; height: 44px; flex: none; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: 1.9rem; letter-spacing: -0.01em; margin: 0; text-wrap: balance; color: var(--vault); }
+.lede { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg button { font: 600 0.95rem var(--f-body); border: 0; border-radius: 9px; padding: 10px 8px; background: transparent; color: var(--muted); cursor: pointer; }
+.seg button[aria-selected="true"] { background: var(--vault); color: var(--bg); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 16px; }
+.step { display: grid; gap: 8px; }
+.label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.drop { position: relative; border: 1.5px dashed var(--line); border-radius: 12px; padding: 22px 16px; text-align: center; display: grid; gap: 4px; cursor: pointer; transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--brass); background: var(--brass-soft); }
+.drop strong { font-weight: 600; }
+.drop span { color: var(--muted); font-size: 0.88rem; }
+.drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.drop:focus-within { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.files { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.files li { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; padding: 8px 10px; border-radius: 8px; background: var(--bg); }
+.files .n { min-width: 0; overflow-wrap: anywhere; }
+.files .s { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.field { display: flex; gap: 6px; }
+.field input { flex: 1; min-width: 0; font: 400 1rem var(--f-mono); padding: 11px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.field input:focus { outline: 2px solid var(--brass); outline-offset: 1px; border-color: transparent; }
+.ghost { font: 500 0.85rem var(--f-body); border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--muted); padding: 0 12px; cursor: pointer; }
+.ghost:focus-visible, .primary:focus-visible, .seg button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+.meter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.meter i { height: 4px; border-radius: 2px; background: var(--line); }
+.meter[data-l="1"] i:nth-child(-n+1) { background: var(--bad); }
+.meter[data-l="2"] i:nth-child(-n+2) { background: var(--brass); }
+.meter[data-l="3"] i:nth-child(-n+3) { background: var(--ok); }
+.meter[data-l="4"] i { background: var(--ok); }
+.hint { font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+.primary { font: 600 1rem var(--f-body); border: 0; border-radius: 11px; padding: 13px 16px; background: var(--brass); color: #1a1205; cursor: pointer; }
+.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.msg { font-size: 0.9rem; border-radius: 10px; padding: 10px 12px; margin: 0; }
+.msg.ok { background: var(--ok-soft); color: var(--ok); }
+.msg.bad { background: var(--bad-soft); color: var(--bad); }
+.msg.info { background: var(--brass-soft); color: var(--ink); }
+
+.result { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
+.preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.preview img, .preview video { width: 100%; max-width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; background: var(--bg); }
+
+.spec { font-size: 0.85rem; color: var(--muted); display: grid; gap: 10px; }
+.spec h2 { font-family: var(--f-display); font-size: 1.05rem; color: var(--ink); margin: 0; }
+.spec dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; }
+.spec dt { font-weight: 600; color: var(--ink); }
+.spec dd { margin: 0; font-family: var(--f-mono); font-size: 0.8rem; min-width: 0; overflow-wrap: anywhere; }
+.spec ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+
+.actions { display: grid; gap: 8px; }
+.secondary { font: 600 1rem var(--f-body); border: 1px solid var(--brass); border-radius: 11px; padding: 12px 16px; background: transparent; color: var(--ink); cursor: pointer; }
+.secondary:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.foot { font-size: 0.8rem; color: var(--muted); text-align: center; margin: 0; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="dial" viewBox="0 0 44 44" aria-hidden="true">
+        <circle cx="22" cy="22" r="20" fill="none" stroke="var(--vault)" stroke-width="2.5"/>
+        <circle cx="22" cy="22" r="12" fill="none" stroke="var(--brass)" stroke-width="2"/>
+        <g stroke="var(--vault)" stroke-width="2" stroke-linecap="round">
+          <line x1="22" y1="4" x2="22" y2="8"/><line x1="22" y1="36" x2="22" y2="40"/>
+          <line x1="4" y1="22" x2="8" y2="22"/><line x1="36" y1="22" x2="40" y2="22"/>
+        </g>
+        <line x1="22" y1="22" x2="29" y2="15" stroke="var(--brass)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="22" cy="22" r="2.5" fill="var(--brass)"/>
+      </svg>
+      <h1>Bóveda de Archivos</h1>
+    </div>
+    <p class="lede">Cifra fotos y documentos con contraseña. Todo ocurre en este dispositivo: los archivos nunca se suben a ningún servidor.</p>
+  </header>
+
+  <div class="seg" role="tablist" aria-label="Modo">
+    <button id="tab-enc" role="tab" aria-selected="true" aria-controls="p-enc">Cifrar</button>
+    <button id="tab-dec" role="tab" aria-selected="false" aria-controls="p-dec">Descifrar</button>
+  </div>
+
+  <!-- CIFRAR -->
+  <section class="panel" id="p-enc" role="tabpanel" aria-labelledby="tab-enc">
+    <div class="step">
+      <span class="label">1 · Archivos</span>
+      <label class="drop" id="drop-enc">
+        <strong>Elegir fotos o archivos</strong>
+        <span>En iPhone puede elegir de Fotos o de Archivos. Varios a la vez se guardan juntos.</span>
+        <input id="in-enc" type="file" multiple>
+      </label>
+      <ul class="files" id="list-enc"></ul>
+    </div>
+    <div class="step">
+      <span class="label">2 · Contraseña</span>
+      <div class="field">
+        <input id="pw1" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres" aria-label="Contraseña">
+        <button class="ghost" type="button" data-toggle="pw1">Ver</button>
+      </div>
+      <div class="meter" id="meter" data-l="0"><i></i><i></i><i></i><i></i></div>
+      <div class="field">
+        <input id="pw2" type="password" autocomplete="new-password" placeholder="Repita la contraseña" aria-label="Confirmar contraseña">
+      </div>
+      <p class="hint" id="pw-hint">Una frase de 4 o más palabras es más segura y fácil de recordar. Si la olvida, no hay forma de recuperar los archivos.</p>
+    </div>
+    <button class="primary" id="go-enc" disabled>Cifrar</button>
+    <p class="msg" id="msg-enc" hidden></p>
+  </section>
+
+  <!-- DESCIFRAR -->
+  <section class="panel" id="p-dec" role="tabpanel" aria-labelledby="tab-dec" hidden>
+    <div class="step">
+      <span class="label">1 · Archivo cifrado</span>
+      <label class="drop" id="drop-dec">
+        <strong>Elegir archivo .cifrado.txt</strong>
+        <span>El archivo que generó esta bóveda.</span>
+        <input id="in-dec" type="file">
+      </label>
+      <ul class="files" id="list-dec"></ul>
+    </div>
+    <div class="step">
+      <span class="label">2 · Contraseña</span>
+      <div class="field">
+        <input id="pw3" type="password" autocomplete="current-password" placeholder="Contraseña" aria-label="Contraseña para descifrar">
+        <button class="ghost" type="button" data-toggle="pw3">Ver</button>
+      </div>
+    </div>
+    <button class="primary" id="go-dec" disabled>Descifrar</button>
+    <p class="msg" id="msg-dec" hidden></p>
+    <div class="result" id="res-dec" hidden>
+      <span class="label">Contenido</span>
+      <ul class="files" id="list-out"></ul>
+      <div class="preview" id="preview"></div>
+      <div class="actions">
+        <button class="primary" id="share-dec" hidden>Guardar en Fotos o compartir</button>
+        <button class="secondary" id="save-dec">Descargar a Archivos</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="spec">
+    <h2>Cómo protege sus archivos</h2>
+    <dl>
+      <dt>Cifrado</dt><dd>AES-256-GCM (detecta cualquier alteración)</dd>
+      <dt>Derivación</dt><dd>PBKDF2-SHA-256, 600 000 iteraciones, sal aleatoria de 128 bits</dd>
+      <dt>Motor</dt><dd>Web Crypto API del navegador</dd>
+      <dt>Salida</dt><dd>nombre.cifrado.txt (texto Base64)</dd>
+    </dl>
+    <ul>
+      <li>Después de cifrar, borre el original de Fotos o de su carpeta, y vacíe “Eliminados recientemente”.</li>
+      <li>Guarde el archivo cifrado donde quiera: iCloud Drive, Google Drive, una USB. Sin la contraseña es ilegible.</li>
+      <li>En iPhone, “Guardar en Fotos o compartir” devuelve las imágenes al carrete. Varios archivos descargados se entregan juntos en un .zip.</li>
+      <li>Para tenerla como app: en Safari toque Compartir y luego “Agregar a inicio”. Funciona sin internet.</li>
+    </ul>
+  </section>
+  <p class="foot">Bóveda de Archivos · el cifrado ocurre solo en este dispositivo</p>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const MAGIC = enc.encode("BVD1");
+  const ITER = 600000;
+  const HEADER_LINE = "BOVEDA-DE-ARCHIVOS v1";
+
+  /* ---------- utilidades ---------- */
+  const fmt = (n) => n < 1024 ? n + " B" : n < 1048576 ? (n/1024).toFixed(1) + " KB" : (n/1048576).toFixed(1) + " MB";
+  const ext = (name) => { const m = /\.([^.]+)$/.exec(name); return m ? m[1].toLowerCase() : ""; };
+  const show = (el, text, kind) => { el.textContent = text; el.className = "msg " + kind; el.hidden = false; };
+  const hide = (el) => { el.hidden = true; };
+
+  function renderList(ul, items) {
+    ul.textContent = "";
+    for (const it of items) {
+      const li = document.createElement("li");
+      const n = document.createElement("span"); n.className = "n"; n.textContent = it.name;
+      const s = document.createElement("span"); s.className = "s"; s.textContent = fmt(it.size);
+      li.append(n, s); ul.append(li);
+    }
+  }
+
+  function toB64(bytes) {
+    let out = "";
+    const CH = 3 * 16384;
+    for (let i = 0; i < bytes.length; i += CH) out += btoa(String.fromCharCode.apply(null, bytes.subarray(i, i + CH)));
+    return out;
+  }
+  function fromB64(str) {
+    const bin = atob(str);
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  async function deriveKey(pw, salt, iter) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(pw.normalize("NFC")), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt, iterations: iter }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }
+
+  /* ---------- ZIP sin compresión ---------- */
+  const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = (b) => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  function makeZip(files) {
+    const parts = [], central = []; let offset = 0;
+    const used = new Set();
+    for (const f of files) {
+      let name = f.name, i = 1;
+      while (used.has(name)) name = f.name.replace(/(\.[^.]*)?$/, (m) => ` (${i++})` + m);
+      used.add(name);
+      const nm = enc.encode(name), crc = crc32(f.data), sz = f.data.length;
+      const lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true);
+      lh.setUint16(8, 0, true); lh.setUint16(10, 0, true); lh.setUint16(12, 33, true);
+      lh.setUint32(14, crc, true); lh.setUint32(18, sz, true); lh.setUint32(22, sz, true);
+      lh.setUint16(26, nm.length, true); lh.setUint16(28, 0, true);
+      parts.push(new Uint8Array(lh.buffer), nm, f.data);
+      const ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true);
+      ch.setUint16(10, 0, true); ch.setUint16(12, 0, true); ch.setUint16(14, 33, true);
+      ch.setUint32(16, crc, true); ch.setUint32(20, sz, true); ch.setUint32(24, sz, true);
+      ch.setUint16(28, nm.length, true); ch.setUint32(42, offset, true);
+      central.push(new Uint8Array(ch.buffer), nm);
+      offset += 30 + nm.length + sz;
+    }
+    const cdSize = central.reduce((a, b) => a + b.length, 0);
+    const end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+    return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type: "application/zip" });
+  }
+
+  /* ---------- pestañas ---------- */
+  function setTab(which) {
+    const isEnc = which === "enc";
+    $("tab-enc").setAttribute("aria-selected", isEnc); $("tab-dec").setAttribute("aria-selected", !isEnc);
+    $("p-enc").hidden = !isEnc; $("p-dec").hidden = isEnc;
+    try { localStorage.setItem("boveda-tab", which); } catch (e) {}
+  }
+  $("tab-enc").onclick = () => setTab("enc");
+  $("tab-dec").onclick = () => setTab("dec");
+  try { if (localStorage.getItem("boveda-tab") === "dec") setTab("dec"); } catch (e) {}
+
+  document.querySelectorAll("[data-toggle]").forEach(b => {
+    b.onclick = () => { const i = $(b.dataset.toggle); const v = i.type === "password"; i.type = v ? "text" : "password"; b.textContent = v ? "Ocultar" : "Ver"; };
+  });
+
+  for (const [dz, inp] of [["drop-enc", "in-enc"], ["drop-dec", "in-dec"]]) {
+    const d = $(dz);
+    d.addEventListener("dragover", e => { e.preventDefault(); d.classList.add("over"); });
+    d.addEventListener("dragleave", () => d.classList.remove("over"));
+    d.addEventListener("drop", e => { e.preventDefault(); d.classList.remove("over"); $(inp).files = e.dataTransfer.files; $(inp).dispatchEvent(new Event("change")); });
+  }
+
+  /* ---------- cifrar ---------- */
+  let encFiles = [];
+  function strength(pw) {
+    if (!pw) return 0;
+    let pool = 0;
+    if (/[a-zñáéíóú]/.test(pw)) pool += 26; if (/[A-ZÑÁÉÍÓÚ]/.test(pw)) pool += 26;
+    if (/\d/.test(pw)) pool += 10; if (/[^\wñáéíóúÑÁÉÍÓÚ]/.test(pw)) pool += 30;
+    const bits = pw.length * Math.log2(Math.max(pool, 10));
+    return bits < 40 ? 1 : bits < 60 ? 2 : bits < 80 ? 3 : 4;
+  }
+  function checkEnc() {
+    const a = $("pw1").value, b = $("pw2").value, l = strength(a);
+    $("meter").dataset.l = l;
+    const okPw = a.length >= 8 && a === b;
+    $("go-enc").disabled = !(encFiles.length && okPw);
+    if (b && a !== b) $("pw-hint").textContent = "Las contraseñas no coinciden.";
+    else if (a && a.length < 8) $("pw-hint").textContent = "Use al menos 8 caracteres.";
+    else $("pw-hint").textContent = l >= 3 ? "Contraseña robusta. Anótela en un lugar seguro: no hay forma de recuperarla." : "Una frase de 4 o más palabras es más segura y fácil de recordar. Si la olvida, no hay forma de recuperar los archivos.";
+  }
+  $("in-enc").onchange = (e) => { encFiles = [...e.target.files]; renderList($("list-enc"), encFiles); hide($("msg-enc")); checkEnc(); };
+  $("pw1").oninput = checkEnc; $("pw2").oninput = checkEnc;
+
+  async function offerSave(filename, data, msgEl) {
+    try {
+      const blob = data instanceof Blob ? data : new Blob([data]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.rel = "noopener";
+      document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      return true;
+    } catch (err) {
+      show(msgEl, "No se pudo descargar el archivo: " + (err.message || err), "bad");
+      return false;
+    }
+  }
+
+  function asFiles(list) {
+    return list.map(f => new File([f.data], f.name, { type: f.type || "application/octet-stream" }));
+  }
+  function canShareFiles(list) {
+    try { return !!(navigator.canShare && navigator.canShare({ files: asFiles(list.slice(0, 1)) })); } catch (e) { return false; }
+  }
+
+  $("go-enc").onclick = async () => {
+    const btn = $("go-enc"), msg = $("msg-enc");
+    btn.disabled = true; btn.textContent = "Cifrando…"; hide(msg);
+    try {
+      const datas = await Promise.all(encFiles.map(f => f.arrayBuffer().then(b => new Uint8Array(b))));
+      const manifest = enc.encode(JSON.stringify({ v: 1, files: encFiles.map((f, i) => ({ name: f.name, type: f.type || "", size: datas[i].length })) }));
+      const total = 4 + manifest.length + datas.reduce((a, d) => a + d.length, 0);
+      const plain = new Uint8Array(total);
+      new DataView(plain.buffer).setUint32(0, manifest.length);
+      plain.set(manifest, 4);
+      let p = 4 + manifest.length;
+      for (const d of datas) { plain.set(d, p); p += d.length; }
+
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const head = new Uint8Array(4 + 4 + 16 + 12);
+      head.set(MAGIC, 0); new DataView(head.buffer).setUint32(4, ITER); head.set(salt, 8); head.set(iv, 24);
+      const key = await deriveKey($("pw1").value, salt, ITER);
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv, additionalData: head }, key, plain));
+      const blob = new Uint8Array(head.length + ct.length);
+      blob.set(head, 0); blob.set(ct, head.length);
+      const text = HEADER_LINE + "\n" + toB64(blob) + "\n";
+
+      const base = encFiles.length === 1 ? encFiles[0].name : `boveda-${encFiles.length}-archivos`;
+      const fname = base + ".cifrado.txt";
+      if (await offerSave(fname, new Blob([text], { type: "text/plain" }), msg)) {
+        show(msg, `Listo: ${fname} (${fmt(text.length)}). Ahora puede borrar ${encFiles.length === 1 ? "el original" : "los originales"}.`, "ok");
+        $("pw1").value = ""; $("pw2").value = ""; checkEnc();
+      }
+    } catch (err) {
+      show(msg, "No se pudo cifrar: " + (err.message || err), "bad");
+    } finally {
+      btn.textContent = "Cifrar"; checkEnc();
+    }
+  };
+
+  /* ---------- descifrar ---------- */
+  let decFile = null, outFiles = [], urls = [];
+  const checkDec = () => { $("go-dec").disabled = !(decFile && $("pw3").value); };
+  $("in-dec").onchange = (e) => { decFile = e.target.files[0] || null; renderList($("list-dec"), decFile ? [decFile] : []); hide($("msg-dec")); $("res-dec").hidden = true; checkDec(); };
+  $("pw3").oninput = checkDec;
+
+  $("go-dec").onclick = async () => {
+    const btn = $("go-dec"), msg = $("msg-dec");
+    btn.disabled = true; btn.textContent = "Descifrando…"; hide(msg); $("res-dec").hidden = true;
+    urls.forEach(u => URL.revokeObjectURL(u)); urls = [];
+    try {
+      let txt = (await decFile.text()).trim();
+      if (txt.startsWith("BOVEDA")) txt = txt.slice(txt.indexOf("\n") + 1);
+      let raw;
+      try { raw = fromB64(txt.replace(/\s+/g, "")); } catch (e) { throw new Error("formato"); }
+      if (raw.length < 37 || dec.decode(raw.subarray(0, 4)) !== "BVD1") throw new Error("formato");
+      const head = raw.subarray(0, 36);
+      const iter = new DataView(raw.buffer, raw.byteOffset).getUint32(4);
+      const key = await deriveKey($("pw3").value, raw.slice(8, 24), iter);
+      let plain;
+      try { plain = new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(24, 36), additionalData: head }, key, raw.subarray(36))); }
+      catch (e) { throw new Error("clave"); }
+      const mlen = new DataView(plain.buffer).getUint32(0);
+      const man = JSON.parse(dec.decode(plain.subarray(4, 4 + mlen)));
+      let p = 4 + mlen;
+      outFiles = man.files.map(f => { const data = plain.slice(p, p + f.size); p += f.size; return { ...f, data }; });
+
+      renderList($("list-out"), outFiles);
+      const pv = $("preview"); pv.textContent = "";
+      for (const f of outFiles) {
+        const t = f.type || "";
+        if (t.startsWith("image/") || t.startsWith("video/")) {
+          const u = URL.createObjectURL(new Blob([f.data], { type: t })); urls.push(u);
+          const el = document.createElement(t.startsWith("image/") ? "img" : "video");
+          el.src = u; el.alt = f.name; if (el.tagName === "VIDEO") el.controls = true;
+          pv.append(el);
+        }
+      }
+      $("share-dec").hidden = !canShareFiles(outFiles);
+      $("res-dec").hidden = false;
+      show(msg, "Contraseña correcta. Archivo íntegro.", "ok");
+    } catch (err) {
+      if (err.message === "clave") show(msg, "Contraseña incorrecta, o el archivo fue modificado.", "bad");
+      else if (err.message === "formato") show(msg, "Este archivo no fue creado por la Bóveda de Archivos.", "bad");
+      else show(msg, "No se pudo descifrar: " + (err.message || err), "bad");
+    } finally {
+      btn.textContent = "Descifrar"; checkDec();
+    }
+  };
+
+  $("save-dec").onclick = async () => {
+    const msg = $("msg-dec");
+    if (!outFiles.length) return;
+    const single = outFiles.length === 1;
+    const ok = single
+      ? await offerSave(outFiles[0].name, new Blob([outFiles[0].data], { type: outFiles[0].type || "application/octet-stream" }), msg)
+      : await offerSave((decFile.name.replace(/\.cifrado\.txt$/i, "").replace(/\.[^.]+$/, "") || "boveda") + ".zip", makeZip(outFiles), msg);
+    if (ok) show(msg, single ? "Descarga iniciada." : "Descarga iniciada: los archivos van juntos en un .zip.", "ok");
+  };
+
+  $("share-dec").onclick = async () => {
+    const msg = $("msg-dec");
+    try {
+      await navigator.share({ files: asFiles(outFiles) });
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+      show(msg, "No se pudo compartir. Use “Descargar a Archivos”.", "bad");
+    }
+  };
+
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  }
+})();
+</script>
+</body>
+</html>
